@@ -71,67 +71,72 @@ export default function App() {
   ]
 
   return (
-    <div className="min-h-screen bg-navy-950">
+    <div className="min-h-screen bg-white text-gray-900 font-sans">
       {/* Nav */}
-      <nav className="fixed top-0 w-full z-50 bg-navy-950/90 backdrop-blur border-b border-white/5">
+      <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div>
-            <span className="text-xl font-black tracking-widest text-white">NexaProc</span>
-            <span className="ml-2 text-xs text-amber-400 font-medium">by GALVON</span>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
+              <Factory size={16} className="text-white" />
+            </div>
+            <div>
+              <span className="text-xl font-black tracking-widest text-gray-900">NexaProc</span>
+              <span className="ml-2 text-xs text-amber-600 font-semibold">by GALVON</span>
+            </div>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm text-gray-400">
-            <a href="#features" className="hover:text-white transition-colors">Features</a>
-            <a href="#industries" className="hover:text-white transition-colors">Industries</a>
-            <a href="#integrations" className="hover:text-white transition-colors">Integrations</a>
-            <a href="#contact" className="bg-amber-500 text-black px-4 py-2 rounded-lg font-semibold hover:bg-amber-400 transition-colors">Book Demo</a>
+          <div className="hidden md:flex items-center gap-8 text-sm text-gray-600">
+            <a href="#features" className="hover:text-amber-600 transition-colors">Features</a>
+            <a href="#industries" className="hover:text-amber-600 transition-colors">Industries</a>
+            <a href="#integrations" className="hover:text-amber-600 transition-colors">Integrations</a>
+            <a href="#contact" className="bg-amber-500 text-white px-5 py-2 rounded-lg hover:bg-amber-600 transition-colors font-semibold">Book Demo</a>
           </div>
-          <button className="md:hidden text-white" onClick={() => setMenuOpen(!menuOpen)}>
+          <button className="md:hidden text-gray-700" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
         {menuOpen && (
-          <div className="md:hidden px-6 pb-4 flex flex-col gap-4 text-sm text-gray-300 border-t border-white/5 pt-4">
+          <div className="md:hidden px-6 pb-4 flex flex-col gap-4 text-sm text-gray-600 border-t border-gray-100 pt-4">
             <a href="#features" onClick={() => setMenuOpen(false)}>Features</a>
             <a href="#industries" onClick={() => setMenuOpen(false)}>Industries</a>
             <a href="#integrations" onClick={() => setMenuOpen(false)}>Integrations</a>
-            <a href="#contact" className="bg-amber-500 text-black px-4 py-2 rounded-lg font-semibold text-center" onClick={() => setMenuOpen(false)}>Book Demo</a>
+            <a href="#contact" className="bg-amber-500 text-white px-4 py-2 rounded-lg font-semibold text-center" onClick={() => setMenuOpen(false)}>Book Demo</a>
           </div>
         )}
       </nav>
 
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center justify-center grid-bg pt-20">
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-500/5 via-transparent to-navy-950" />
-        <div className="relative z-10 text-center px-6 max-w-5xl mx-auto animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-full px-4 py-1.5 text-amber-400 text-sm mb-8">
+      <section className="relative min-h-screen flex items-center justify-center pt-20 bg-gradient-to-br from-amber-50/60 via-orange-50/30 to-white">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-100/50 via-transparent to-transparent" />
+        <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+          <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-4 py-1.5 text-amber-700 text-sm font-medium mb-8">
             <Factory size={14} />
             Factory and Process Automation SCADA
           </div>
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight text-white mb-6">
-            Nexa<span className="text-amber-400">Proc</span>
+          <h1 className="text-5xl md:text-7xl font-black tracking-tight text-gray-900 mb-6">
+            Nexa<span className="text-amber-500">Proc</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-4 max-w-2xl mx-auto leading-relaxed">{heroSub}</p>
-          <p className="text-gray-500 mb-10">Part of the GALVON Industrial Intelligence Suite</p>
+          <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-2xl mx-auto leading-relaxed">{heroSub}</p>
+          <p className="text-gray-400 mb-10 text-sm">Part of the GALVON Industrial Intelligence Suite</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#contact" className="flex items-center justify-center gap-2 bg-amber-500 text-black px-8 py-3 rounded-lg font-semibold hover:bg-amber-400 transition-colors">
+            <a href="#contact" className="flex items-center justify-center gap-2 bg-amber-500 text-white px-8 py-3 rounded-xl font-semibold hover:bg-amber-600 transition-colors shadow-lg shadow-amber-100">
               See Live Demo <ArrowRight size={18} />
             </a>
-            <a href="#features" className="flex items-center justify-center gap-2 border border-white/20 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/5 transition-colors">
+            <a href="#features" className="flex items-center justify-center gap-2 border border-gray-200 text-gray-700 px-8 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors">
               View Features
             </a>
           </div>
           <div className="mt-16 animate-bounce">
-            <ChevronDown size={24} className="mx-auto text-gray-600" />
+            <ChevronDown size={24} className="mx-auto text-gray-300" />
           </div>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="py-16 border-y border-white/5 bg-navy-900/50">
+      <section className="py-16 border-y border-gray-100 bg-white">
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {stats.map((s) => (
             <div key={s.label}>
-              <div className="text-4xl font-black text-amber-400 mb-2">{s.value}</div>
+              <div className="text-4xl font-black text-amber-500 mb-2">{s.value}</div>
               <div className="text-gray-500 text-sm">{s.label}</div>
             </div>
           ))}
@@ -141,16 +146,16 @@ export default function App() {
       {/* Features */}
       <section id="features" className="py-24 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">Built for Process Engineers</h2>
-          <p className="text-gray-400 max-w-xl mx-auto">Every feature designed for the realities of industrial plant operations.</p>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Built for Process Engineers</h2>
+          <p className="text-gray-500 max-w-xl mx-auto">Every feature designed for the realities of industrial plant operations.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((f) => (
-            <div key={f.title} className="bg-navy-900/50 border border-white/5 rounded-2xl p-6 hover:border-amber-500/30 transition-colors">
-              <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center mb-4">
-                <f.icon className="text-amber-400" size={22} />
+            <div key={f.title} className="bg-white border border-gray-100 rounded-2xl p-6 hover:border-amber-200 hover:shadow-md transition-all">
+              <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mb-4">
+                <f.icon className="text-amber-500" size={22} />
               </div>
-              <h3 className="text-white font-semibold mb-2">{f.title}</h3>
+              <h3 className="text-gray-900 font-semibold mb-2">{f.title}</h3>
               <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
             </div>
           ))}
@@ -158,23 +163,23 @@ export default function App() {
       </section>
 
       {/* How It Works */}
-      <section className="py-24 px-6 bg-navy-900/30">
+      <section className="py-24 px-6 bg-slate-50">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">How It Works</h2>
-            <p className="text-gray-400">Three steps to full plant visibility and control.</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
+            <p className="text-gray-500">Three steps to full plant visibility and control.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {steps.map((s, i) => (
               <div key={s.num} className="text-center relative">
-                <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <s.icon className="text-amber-400" size={28} />
+                <div className="w-16 h-16 bg-amber-50 border-2 border-amber-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <s.icon className="text-amber-500" size={28} />
                 </div>
-                <div className="text-amber-400 text-sm font-mono mb-2">{s.num}</div>
-                <h3 className="text-white font-bold text-xl mb-2">{s.title}</h3>
+                <div className="text-amber-500 text-sm font-mono font-bold mb-2">{s.num}</div>
+                <h3 className="text-gray-900 font-bold text-xl mb-2">{s.title}</h3>
                 <p className="text-gray-500 text-sm">{s.desc}</p>
                 {i < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-8 right-0 transform translate-x-1/2 text-gray-700">
+                  <div className="hidden md:block absolute top-8 right-0 transform translate-x-1/2 text-gray-300">
                     <ArrowRight size={20} />
                   </div>
                 )}
@@ -188,14 +193,14 @@ export default function App() {
       <section id="industries" className="py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">Industries We Serve</h2>
-            <p className="text-gray-400">NexaProc adapts to your industry's unique process requirements.</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Industries We Serve</h2>
+            <p className="text-gray-500">NexaProc adapts to your industry's unique process requirements.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {industries.map((ind) => (
-              <div key={ind.label} className="flex flex-col items-center gap-3 bg-navy-900/50 border border-white/5 rounded-xl p-5 hover:border-amber-500/30 transition-colors">
-                <ind.icon className="text-amber-400" size={28} />
-                <span className="text-gray-300 text-sm text-center font-medium">{ind.label}</span>
+              <div key={ind.label} className="flex flex-col items-center gap-3 bg-white border border-gray-100 rounded-xl p-5 hover:border-amber-200 hover:shadow-md transition-all">
+                <ind.icon className="text-amber-500" size={28} />
+                <span className="text-gray-700 text-sm text-center font-medium">{ind.label}</span>
               </div>
             ))}
           </div>
@@ -203,13 +208,13 @@ export default function App() {
       </section>
 
       {/* Integrations */}
-      <section id="integrations" className="py-24 px-6 bg-navy-900/30">
+      <section id="integrations" className="py-24 px-6 bg-slate-50">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-white mb-4">Connects to Everything You Have</h2>
-          <p className="text-gray-400 mb-12">No rip-and-replace. NexaProc works with your existing industrial infrastructure.</p>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Connects to Everything You Have</h2>
+          <p className="text-gray-500 mb-12">No rip-and-replace. NexaProc works with your existing industrial infrastructure.</p>
           <div className="flex flex-wrap justify-center gap-4">
             {integrations.map((name) => (
-              <div key={name} className="bg-navy-900/80 border border-white/10 rounded-xl px-6 py-3 text-gray-300 font-medium hover:border-amber-500/30 transition-colors">
+              <div key={name} className="bg-white border border-gray-200 rounded-xl px-6 py-3 text-gray-700 font-medium hover:border-amber-300 hover:shadow-sm transition-all">
                 {name}
               </div>
             ))}
@@ -220,25 +225,25 @@ export default function App() {
       {/* Testimonial */}
       <section className="py-24 px-6">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-navy-900/50 border border-amber-500/20 rounded-2xl p-8 text-center">
+          <div className="bg-amber-50 border border-amber-100 rounded-2xl p-8 text-center">
             <div className="text-amber-400 text-4xl mb-4">"</div>
-            <p className="text-gray-300 text-lg leading-relaxed mb-6">
+            <p className="text-gray-700 text-lg leading-relaxed mb-6">
               NexaProc gave us complete visibility into our production lines. Downtime dropped by 40% in the first quarter after deployment.
             </p>
-            <div className="text-white font-semibold">Plant Manager, Manufacturing Unit</div>
-            <div className="text-gray-500 text-sm mt-1">Nagpur, India</div>
+            <div className="text-gray-900 font-semibold">Plant Manager, Manufacturing Unit</div>
+            <div className="text-gray-400 text-sm mt-1">Nagpur, India</div>
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section id="contact" className="py-24 px-6">
+      <section id="contact" className="py-24 px-6 bg-slate-50">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/20 rounded-3xl p-12">
-            <CheckCircle className="text-amber-400 mx-auto mb-6" size={40} />
-            <h2 className="text-4xl font-bold text-white mb-4">Start your digital plant journey</h2>
-            <p className="text-gray-400 mb-8">Get a live demo customized for your plant and industry. No commitment required.</p>
-            <a href="mailto:hello@galvon.com" className="inline-flex items-center gap-2 bg-amber-500 text-black px-8 py-3 rounded-lg font-semibold hover:bg-amber-400 transition-colors">
+          <div className="bg-white border border-amber-100 rounded-3xl p-12 shadow-xl shadow-amber-50">
+            <CheckCircle className="text-amber-500 mx-auto mb-6" size={40} />
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Start your digital plant journey</h2>
+            <p className="text-gray-500 mb-8">Get a live demo customized for your plant and industry. No commitment required.</p>
+            <a href="mailto:hello@galvon.com" className="inline-flex items-center gap-2 bg-amber-500 text-white px-8 py-3 rounded-xl font-semibold hover:bg-amber-600 transition-colors shadow-lg shadow-amber-100">
               Book a Demo <ArrowRight size={18} />
             </a>
           </div>
@@ -246,20 +251,25 @@ export default function App() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-10 px-6">
+      <footer className="border-t border-gray-100 py-10 px-6 bg-white">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div>
-            <span className="text-xl font-black tracking-widest text-white">NexaProc</span>
-            <span className="ml-2 text-xs text-amber-400">by GALVON</span>
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 bg-amber-500 rounded-lg flex items-center justify-center">
+              <Factory size={14} className="text-white" />
+            </div>
+            <div>
+              <span className="text-lg font-black tracking-widest text-gray-900">NexaProc</span>
+              <span className="ml-1.5 text-xs text-amber-600 font-semibold">by GALVON</span>
+            </div>
           </div>
-          <div className="flex gap-6 text-sm text-gray-500">
-            <a href="https://github.com/chatgptnotes/galvon" className="hover:text-gray-300">Ampris</a>
-            <a href="https://github.com/chatgptnotes/flownexus" className="hover:text-gray-300">FlowNexus</a>
-            <span className="text-amber-400">NexaProc</span>
+          <div className="flex gap-6 text-sm text-gray-400">
+            <a href="https://github.com/chatgptnotes/ampris" className="hover:text-gray-600">Ampris</a>
+            <a href="https://github.com/chatgptnotes/flownexus" className="hover:text-gray-600">FlowNexus</a>
+            <span className="text-amber-500 font-medium">NexaProc</span>
           </div>
           <div className="text-center md:text-right">
-            <div className="text-gray-400 text-sm">drmhope.com | A Bettroi Product</div>
-            <div className="text-gray-600 text-xs mt-1">v{VERSION} | {BUILD_DATE} | nexaproc</div>
+            <div className="text-gray-500 text-sm">drmhope.com | A Bettroi Product</div>
+            <div className="text-gray-400 text-xs mt-1">v{VERSION} | {BUILD_DATE} | nexaproc</div>
           </div>
         </div>
       </footer>
