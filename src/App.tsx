@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Factory, Activity, Bell, FlaskConical, Zap, BarChart3, Cpu, Wifi, ArrowRight, CheckCircle, ChevronDown, Pill, Wheat, Shirt, Car, Mountain, Menu, X, Settings, TrendingUp, Shield, Layers } from 'lucide-react'
+import { Factory, Activity, Bell, FlaskConical, Zap, BarChart3, Cpu, Wifi, ArrowRight, CheckCircle, ChevronDown, Pill, Wheat, Shirt, Car, Mountain, Menu, X, Settings, TrendingUp, Shield, Layers, Phone, Download, TrendingDown, AlertTriangle, DollarSign } from 'lucide-react'
 
-const VERSION = '1.0'
-const BUILD_DATE = 'March 2026'
+const VERSION = '1.2'; const BUILD_DATE = 'March 2026'
 const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY
-
 async function fetchGeminiText(prompt: string, fallback: string): Promise<string> {
   if (!GEMINI_KEY) return fallback
   try {
@@ -14,198 +12,102 @@ async function fetchGeminiText(prompt: string, fallback: string): Promise<string
   } catch { return fallback }
 }
 
-// ── NEXAPROC LOGO — Nature Phoenix colour theme ──────────────────────────────
-function NexaProcLogo({ size = 'full' }: { size?: 'full' | 'compact' }) {
-  if (size === 'compact') {
-    return (
-      <svg viewBox="0 0 44 44" width="36" height="36" style={{ overflow: 'visible' }}>
-        <defs>
-          <linearGradient id="npIcon" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#f59e0b"/><stop offset="100%" stopColor="#ea580c"/>
-          </linearGradient>
-          <filter id="npGlow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        {/* gear teeth */}
-        {[0,45,90,135,180,225,270,315].map((deg,i)=>{
-          const r=Math.PI*deg/180; const x=22+18*Math.cos(r); const y=22+18*Math.sin(r)
-          return <line key={i} x1={22+13*Math.cos(r)} y1={22+13*Math.sin(r)} x2={x} y2={y} stroke="#f59e0b" strokeWidth="3.5" strokeLinecap="round" opacity="0.7"/>
-        })}
-        <circle cx="22" cy="22" r="13" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" strokeWidth="1.5"/>
-        <circle cx="22" cy="22" r="9" fill="#071408"/>
-        <text x="22" y="22" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="9" fill="url(#npIcon)" textAnchor="middle" dominantBaseline="middle" filter="url(#npGlow)">NP</text>
-      </svg>
-    )
-  }
+// ── NATURE PHOENIX palette ────────────────────────────────────────────────────
+const N = { bg:'#05100a', bg2:'#071408', amber:'#f59e0b', orange:'#ea580c', green:'#16a34a', lime:'#22c55e', gold:'#fbbf24', white:'#ffffff', muted:'rgba(255,255,255,0.55)', dim:'rgba(255,255,255,0.3)' }
+
+function WaveDivider({ from, to, flip=false }:{ from:string; to:string; flip?:boolean }) {
   return (
-    <svg viewBox="0 0 600 220" width="100%" style={{ maxWidth: 560, display: 'block' }}>
-      <defs>
-        <linearGradient id="npGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#ea580c"/>
-        </linearGradient>
-        <linearGradient id="npLine" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#f59e0b"/><stop offset="100%" stopColor="#fbbf24"/>
-        </linearGradient>
-        <filter id="npGlowF"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="npSoft"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
-
-      {/* Gear outer ring */}
-      <circle cx="75" cy="75" r="68" fill="none" stroke="#f59e0b" strokeWidth="1" opacity="0.15"/>
-      <circle cx="75" cy="75" r="55" fill="rgba(245,158,11,0.06)" stroke="#f59e0b" strokeWidth="1.5" opacity="0.3"/>
-
-      {/* Gear teeth – 8 directions */}
-      {[0,45,90,135,180,225,270,315].map((deg,i)=>{
-        const r=Math.PI*deg/180
-        const x1=75+42*Math.cos(r), y1=75+42*Math.sin(r)
-        const x2=75+58*Math.cos(r), y2=75+58*Math.sin(r)
-        return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#f59e0b" strokeWidth="7" strokeLinecap="round" opacity="0.5"/>
-      })}
-
-      {/* Gear inner circle */}
-      <circle cx="75" cy="75" r="38" fill="#05100a" stroke="#f59e0b" strokeWidth="2"/>
-
-      {/* Nature leaf accents around gear */}
-      <path d="M40 40 Q30 25 45 28 Q42 38 40 40 Z" fill="#16a34a" opacity="0.5"/>
-      <path d="M110 40 Q120 25 105 28 Q108 38 110 40 Z" fill="#16a34a" opacity="0.5"/>
-      <path d="M28 80 Q12 72 18 85 Q24 86 28 80 Z" fill="#22c55e" opacity="0.4"/>
-      <path d="M122 80 Q138 72 132 85 Q126 86 122 80 Z" fill="#22c55e" opacity="0.4"/>
-
-      {/* NP Monogram */}
-      <text x="75" y="79" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="30" fill="url(#npGrad)" textAnchor="middle" dominantBaseline="middle" filter="url(#npGlowF)">NP</text>
-
-      {/* Process flow dotted arcs */}
-      <path d="M30 30 Q75 5 120 30" fill="none" stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.3"/>
-      <path d="M120 120 Q75 145 30 120" fill="none" stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.3"/>
-
-      {/* Wordmark NexaProc */}
-      <text x="162" y="88" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="60" dominantBaseline="middle">
-        <tspan fill="white">Nexa</tspan><tspan fill="url(#npGrad)">Proc</tspan>
-      </text>
-
-      {/* Tagline */}
-      <text x="165" y="130" fontFamily="Arial, sans-serif" fontWeight="400" fontSize="14" letterSpacing="4" fill="#f59e0b" dominantBaseline="middle">FACTORY AUTOMATION SCADA</text>
-
-      {/* Accent line */}
-      <rect x="165" y="145" width="345" height="1.5" rx="1" fill="url(#npLine)" opacity="0.55"/>
-
-      {/* by GALVON badge */}
-      <rect x="165" y="160" width="92" height="22" rx="11" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" strokeWidth="1"/>
-      <text x="211" y="171" fontFamily="Arial, sans-serif" fontSize="10" fontWeight="700" fill="#fbbf24" textAnchor="middle" dominantBaseline="middle" letterSpacing="2">by GALVON</text>
-
-      {/* green leaf dot accents */}
-      <circle cx="270" cy="171" r="3" fill="#16a34a" opacity="0.5"/>
-      <circle cx="280" cy="171" r="2" fill="#22c55e" opacity="0.4"/>
-    </svg>
-  )
-}
-
-function NexaProcDashboard() {
-  const AMBER = '#f59e0b'; const ORANGE = '#ea580c'; const GREEN = '#16a34a'
-  const flowStages = [
-    {label:'REACTOR', val:'97.4°C', color:ORANGE},
-    {label:'MIXER', val:'850 RPM', color:AMBER},
-    {label:'SEPARATOR', val:'2.1 bar', color:GREEN},
-    {label:'OUTPUT', val:'OK', color:'#22c55e'},
-  ]
-  const metrics = [
-    {label:'Production Rate', val:'847', unit:'units/hr', color:AMBER},
-    {label:'OEE Score', val:'94.2', unit:'%', color:GREEN},
-    {label:'Active Alarms', val:'2', unit:'low priority', color:ORANGE},
-    {label:'Energy Usage', val:'18.4', unit:'kWh/unit', color:'#fbbf24'},
-  ]
-  const trendY = [95,90,88,92,85,87,80,83,75,78,72,76,70]
-  return (
-    <div style={{position:'relative',width:'100%',maxWidth:520}}>
-      <div style={{position:'absolute',inset:0,borderRadius:20,background:'radial-gradient(ellipse at 55% 40%, rgba(245,158,11,0.22) 0%, transparent 65%)',filter:'blur(30px)',pointerEvents:'none'}}/>
-      <svg viewBox="0 0 520 400" style={{width:'100%',display:'block',filter:'drop-shadow(0 0 40px rgba(245,158,11,0.25))'}}>
-        {/* Panel */}
-        <rect x="0" y="0" width="520" height="400" rx="18" fill="rgba(4,9,3,0.96)" stroke="rgba(245,158,11,0.45)" strokeWidth="1.5"/>
-        {/* Header */}
-        <rect x="0" y="0" width="520" height="46" rx="18" fill="rgba(245,158,11,0.12)"/>
-        <rect x="0" y="30" width="520" height="16" fill="rgba(245,158,11,0.12)"/>
-        <circle cx="20" cy="23" r="5" fill="#ef4444" opacity="0.85"/>
-        <circle cx="36" cy="23" r="5" fill="#f59e0b" opacity="0.85"/>
-        <circle cx="52" cy="23" r="5" fill="#22c55e" opacity="0.85"/>
-        <text x="74" y="23" fontFamily="monospace" fontSize="12" fill="rgba(255,255,255,0.75)" dominantBaseline="middle">NexaProc · Process Monitor · Plant A</text>
-        <circle cx="452" cy="23" r="4" fill="#22c55e"/>
-        <text x="462" y="23" fontFamily="monospace" fontSize="11" fill="#22c55e" dominantBaseline="middle">LINE 3</text>
-
-        {/* Process flow pipeline */}
-        <text x="16" y="68" fontFamily="monospace" fontSize="10" fill="rgba(255,255,255,0.3)" letterSpacing="2">PROCESS FLOW</text>
-        {flowStages.map((s, i) => {
-          const x = 16 + i * 126
-          return (
-            <g key={i}>
-              <rect x={x} y="78" width="110" height="64" rx="10" fill="rgba(255,255,255,0.03)" stroke={s.color} strokeWidth="1.2" strokeOpacity="0.55"/>
-              <rect x={x} y="78" width="110" height="24" rx="10" fill={`${s.color}18`}/>
-              <rect x={x} y="90" width="110" height="12" fill={`${s.color}18`}/>
-              <text x={x+55} y="90" fontFamily="monospace" fontSize="9" fontWeight="bold" fill={s.color} textAnchor="middle" dominantBaseline="middle" letterSpacing="1">{s.label}</text>
-              <text x={x+55} y="118" fontFamily="monospace" fontSize="17" fontWeight="900" fill="white" textAnchor="middle" dominantBaseline="middle">{s.val}</text>
-              {/* Connector arrow */}
-              {i < 3 && <>
-                <line x1={x+110} y1="110" x2={x+120} y2="110" stroke={s.color} strokeWidth="1.5" strokeOpacity="0.5"/>
-                <polygon points={`${x+122},106 ${x+128},110 ${x+122},114`} fill={s.color} fillOpacity="0.5"/>
-              </>}
-            </g>
-          )
-        })}
-
-        {/* Metrics row */}
-        <text x="16" y="162" fontFamily="monospace" fontSize="10" fill="rgba(255,255,255,0.3)" letterSpacing="2">LIVE METRICS</text>
-        {metrics.map((m, i) => {
-          const x = 12 + i * 124
-          return (
-            <g key={i}>
-              <rect x={x} y="172" width="116" height="60" rx="8" fill="rgba(255,255,255,0.025)" stroke={`${m.color}40`} strokeWidth="1"/>
-              <text x={x+10} y="190" fontFamily="monospace" fontSize="9" fill="rgba(255,255,255,0.35)" dominantBaseline="middle">{m.label}</text>
-              <text x={x+10} y="212" fontFamily="monospace" fontSize="20" fontWeight="900" fill={m.color} dominantBaseline="middle">{m.val}</text>
-              <text x={x+10} y="226" fontFamily="monospace" fontSize="9" fill="rgba(255,255,255,0.3)" dominantBaseline="middle">{m.unit}</text>
-            </g>
-          )
-        })}
-
-        {/* Divider */}
-        <line x1="12" y1="244" x2="508" y2="244" stroke="rgba(245,158,11,0.18)" strokeWidth="1"/>
-
-        {/* Production trend chart */}
-        <text x="16" y="258" fontFamily="monospace" fontSize="10" fill="rgba(255,255,255,0.3)" letterSpacing="2">PRODUCTION TREND  —  LAST 13 HOURS</text>
-        {/* Chart grid */}
-        {[0,1,2,3].map(i => (
-          <line key={i} x1="16" y1={280+i*20} x2="504" y2={280+i*20} stroke="rgba(255,255,255,0.05)" strokeWidth="1"/>
-        ))}
-        {/* Area */}
-        <polyline
-          points={`16,360 ${trendY.map((y,i)=>`${16+i*40},${y+290}`).join(' ')} 496,360`}
-          fill={`${AMBER}15`} stroke="none"/>
-        {/* Line */}
-        <polyline
-          points={trendY.map((y,i)=>`${16+i*40},${y+290}`).join(' ')}
-          fill="none" stroke={AMBER} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        {/* Dots */}
-        {trendY.map((y,i) => (
-          <circle key={i} cx={16+i*40} cy={y+290} r="3" fill={AMBER} opacity="0.85"/>
-        ))}
-        {/* Y axis labels */}
-        {['100','90','80','70'].map((l,i) => (
-          <text key={i} x="508" y={280+i*20} fontFamily="monospace" fontSize="8" fill="rgba(255,255,255,0.25)" dominantBaseline="middle">{l}%</text>
-        ))}
-
-        {/* Footer */}
-        <rect x="0" y="370" width="520" height="30" rx="0" fill="rgba(245,158,11,0.07)"/>
-        <rect x="0" y="382" width="520" height="18" rx="18" fill="rgba(245,158,11,0.07)"/>
-        <circle cx="18" cy="385" r="3" fill="#22c55e"/>
-        <text x="26" y="385" fontFamily="monospace" fontSize="9" fill="rgba(255,255,255,0.3)" dominantBaseline="middle">Plant A · Line 3 running · Batch #2847 · 94.2% OEE · 2 low alarms</text>
+    <div style={{ background:to, lineHeight:0 }} className={flip?'rotate-180':''}>
+      <svg viewBox="0 0 1440 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" width="100%" height="70">
+        <path d="M0,35 Q360,70 720,35 Q1080,0 1440,35 L1440,0 L0,0 Z" fill={from}/>
       </svg>
     </div>
   )
 }
 
-
-function WaveDivider({ flip = false, from = '#05100a', to = '#0a1a0d' }: { flip?: boolean; from?: string; to?: string }) {
+function ProcessMonitorMockup() {
+  const trendY = [95,90,88,92,85,87,80,83,75,78,72,76,70]
+  const oee = [62,65,68,70,72,74,76,78]
   return (
-    <div style={{ background: to, lineHeight: 0 }} className={flip ? 'rotate-180' : ''}>
-      <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" width="100%" height="80">
-        <path d="M0,40 Q360,80 720,40 Q1080,0 1440,40 L1440,0 L0,0 Z" fill={from} />
+    <div style={{ position:'relative', width:'100%', maxWidth:560 }}>
+      <div style={{ position:'absolute', inset:-30, borderRadius:24, background:`radial-gradient(ellipse at 50% 40%,rgba(245,158,11,0.25) 0%,transparent 70%)`, filter:'blur(30px)', pointerEvents:'none' }}/>
+      <svg viewBox="0 0 540 430" style={{ width:'100%', display:'block', filter:'drop-shadow(0 20px 60px rgba(245,158,11,0.3))' }}>
+        {/* Panel */}
+        <rect x="0" y="0" width="540" height="430" rx="14" fill="rgba(4,9,3,0.97)" stroke="rgba(245,158,11,0.4)" strokeWidth="1.5"/>
+        {/* subtle scanlines */}
+        {[...Array(20)].map((_,i)=><line key={i} x1="0" y1={i*22} x2="540" y2={i*22} stroke="rgba(245,158,11,0.025)" strokeWidth="1"/>)}
+        {/* Header */}
+        <rect x="0" y="0" width="540" height="40" rx="14" fill="rgba(245,158,11,0.1)"/>
+        <rect x="0" y="26" width="540" height="14" fill="rgba(245,158,11,0.1)"/>
+        <circle cx="18" cy="20" r="5" fill="#ef4444" opacity="0.85"/>
+        <circle cx="34" cy="20" r="5" fill="#f59e0b" opacity="0.85"/>
+        <circle cx="50" cy="20" r="5" fill="#22c55e" opacity="0.85"/>
+        <text x="72" y="20" fontFamily="monospace" fontSize="12" fill="rgba(255,255,255,0.7)" dominantBaseline="middle">NexaProc · Process Monitor · Plant A — Line 3</text>
+        <circle cx="498" cy="20" r="4" fill="#22c55e"/>
+        <text x="508" y="20" fontFamily="monospace" fontSize="10" fill="#22c55e" dominantBaseline="middle">RUN</text>
+
+        {/* Process flow */}
+        <text x="14" y="55" fontFamily="monospace" fontSize="9" fill={N.dim} letterSpacing="2">PROCESS FLOW — BATCH #2847</text>
+        {[
+          { label:'REACTOR', val:'97.4°C', color:N.orange },
+          { label:'MIXER', val:'850 RPM', color:N.amber },
+          { label:'SEPARATOR', val:'2.1 bar', color:N.green },
+          { label:'OUTPUT', val:'OK', color:N.lime },
+        ].map((s,i)=>{
+          const x = 12 + i * 129
+          return (
+            <g key={i}>
+              <rect x={x} y="62" width="118" height="62" rx="8" fill="rgba(255,255,255,0.02)" stroke={`${s.color}55`} strokeWidth="1"/>
+              <rect x={x} y="62" width="118" height="22" rx="8" fill={`${s.color}15`}/>
+              <rect x={x} y="74" width="118" height="10" fill={`${s.color}15`}/>
+              <text x={x+59} y="73" fontFamily="monospace" fontSize="9" fontWeight="bold" fill={s.color} textAnchor="middle" dominantBaseline="middle" letterSpacing="1">{s.label}</text>
+              <text x={x+59} y="103" fontFamily="monospace" fontSize="17" fontWeight="900" fill="white" textAnchor="middle" dominantBaseline="middle">{s.val}</text>
+              {i<3&&<><line x1={x+118} y1="93" x2={x+124} y2="93" stroke={s.color} strokeWidth="1.5" opacity="0.5"/><polygon points={`${x+126},89 ${x+132},93 ${x+126},97`} fill={s.color} fillOpacity="0.5"/></>}
+            </g>
+          )
+        })}
+
+        {/* Metrics row */}
+        <text x="14" y="142" fontFamily="monospace" fontSize="9" fill={N.dim} letterSpacing="2">LIVE METRICS</text>
+        {[
+          { label:'Production', val:'847', unit:'units/hr', color:N.amber },
+          { label:'OEE Score', val:'94.2', unit:'%', color:N.green },
+          { label:'Alarms', val:'2', unit:'low priority', color:N.orange },
+          { label:'Energy', val:'18.4', unit:'kWh/unit', color:N.gold },
+        ].map((m,i)=>(
+          <g key={i}>
+            <rect x={12+i*129} y={150} width="120" height="56" rx="7" fill="rgba(255,255,255,0.02)" stroke={`${m.color}35`} strokeWidth="1"/>
+            <text x={12+i*129+10} y={167} fontFamily="monospace" fontSize="9" fill={N.dim} dominantBaseline="middle">{m.label}</text>
+            <text x={12+i*129+10} y={188} fontFamily="monospace" fontSize="19" fontWeight="900" fill={m.color} dominantBaseline="middle">{m.val}</text>
+            <text x={12+i*129+10} y={201} fontFamily="monospace" fontSize="8" fill={N.dim} dominantBaseline="middle">{m.unit}</text>
+          </g>
+        ))}
+
+        {/* Separator */}
+        <line x1="12" y1="218" x2="528" y2="218" stroke={`${N.amber}18`} strokeWidth="1"/>
+
+        {/* Trend chart */}
+        <text x="14" y="232" fontFamily="monospace" fontSize="9" fill={N.dim} letterSpacing="2">PRODUCTION TREND — LAST 13 HRS</text>
+        {[0,1,2,3].map(i=><line key={i} x1="14" y1={252+i*18} x2="380" y2={252+i*18} stroke="rgba(255,255,255,0.04)" strokeWidth="1"/>)}
+        <polyline points={`14,330 ${trendY.map((y,i)=>`${14+i*28},${y+252}`).join(' ')} 350,330`} fill={`${N.amber}12`} stroke="none"/>
+        <polyline points={trendY.map((y,i)=>`${14+i*28},${y+252}`).join(' ')} fill="none" stroke={N.amber} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        {trendY.map((y,i)=><circle key={i} cx={14+i*28} cy={y+252} r="2.5" fill={N.amber} opacity="0.8"/>)}
+
+        {/* OEE trend bar */}
+        <text x="392" y="232" fontFamily="monospace" fontSize="9" fill={N.dim} letterSpacing="2">OEE HISTORY</text>
+        {oee.map((v,i)=>(
+          <g key={i}>
+            <rect x={392+i*18} y={330-v+30} width="13" height={v-30} rx="2" fill={N.green} opacity="0.65"/>
+          </g>
+        ))}
+        <text x="392" y="338" fontFamily="monospace" fontSize="8" fill={N.dim}>62%</text>
+        <text x="500" y="338" fontFamily="monospace" fontSize="8" fill={N.lime}>78%</text>
+
+        {/* Footer */}
+        <rect x="0" y="396" width="540" height="34" rx="0" fill={`${N.amber}08`}/>
+        <rect x="0" y="410" width="540" height="20" rx="14" fill={`${N.amber}08`}/>
+        <circle cx="18" cy="413" r="3" fill="#22c55e"/>
+        <text x="28" y="413" fontFamily="monospace" fontSize="9" fill={N.dim} dominantBaseline="middle">Plant A · Line 3 running · Batch #2847 in progress · 94.2% OEE · 2 low alarms</text>
       </svg>
     </div>
   )
@@ -213,287 +115,319 @@ function WaveDivider({ flip = false, from = '#05100a', to = '#0a1a0d' }: { flip?
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [heroSub, setHeroSub] = useState('Unleash the power of nature-forged intelligence in every process line.')
-
+  const [heroSub, setHeroSub] = useState('Unleash Nature\'s Intelligence in Every Process Line')
   useEffect(() => {
-    fetchGeminiText('Write a powerful 12-word tagline for NexaProc, a factory process automation SCADA. Nature and fire theme, no quotes.', 'Unleash the power of nature-forged intelligence in every process line.').then(setHeroSub)
+    fetchGeminiText('Write a powerful 7-8 word headline for NexaProc, a factory SCADA platform. Nature and fire energy theme. Bold. No quotes.', "Unleash Nature's Intelligence in Every Process Line").then(setHeroSub)
   }, [])
 
+  const navLinks = ['Features','Process','Industries','Integrations']
+
+  const problems = [
+    { icon:TrendingDown, stat:'₹40L+/hr', label:'Lost production from a single hour of unplanned process downtime' },
+    { icon:AlertTriangle, stat:'43%', label:'Of batch failures caused by lack of real-time process visibility' },
+    { icon:DollarSign, stat:'22%', label:'Energy wasted in plants running without per-unit consumption tracking' },
+  ]
+
   const features = [
-    { icon: Activity, title: 'Live Process Monitoring', desc: 'Real-time telemetry from PLCs, RTUs, sensors, and field devices across all production lines.' },
-    { icon: Bell, title: 'Intelligent Alarms', desc: 'Smart alarm management with escalation, deduplication, and acknowledgment workflows.' },
-    { icon: Settings, title: 'Batch Control', desc: 'ISA-88 compliant recipe management with full audit trails and electronic batch records.' },
-    { icon: Zap, title: 'Energy Analytics', desc: 'Per-unit energy consumption, demand forecasting, and waste identification by production line.' },
-    { icon: Cpu, title: 'Predictive Maintenance', desc: 'AI-powered equipment health scoring that flags failures days before they happen.' },
-    { icon: Shield, title: 'Secure by Design', desc: 'IEC 62443 compliant. Role-based access control. Air-gap and cloud deployment options.' },
+    { icon:Activity, title:'Live Process Monitoring', desc:'Sub-second telemetry from every PLC, RTU, DCS, and sensor across all production lines.', c:N.amber },
+    { icon:Bell, title:'Intelligent Alarm Management', desc:'Smart escalation, deduplication, and acknowledgment workflows — no alarm floods.', c:N.green },
+    { icon:Settings, title:'ISA-88 Batch Control', desc:'Recipe management, electronic batch records, and full audit trails for regulated industries.', c:N.amber },
+    { icon:Zap, title:'Per-unit Energy Analytics', desc:'Real-time energy consumption per unit produced — identify waste and cut costs.', c:N.green },
+    { icon:Cpu, title:'Predictive Maintenance AI', desc:'Equipment health scoring that flags failures days before they cascade into downtime.', c:N.amber },
+    { icon:Shield, title:'IEC 62443 + FDA 21 CFR', desc:'Pharmaceutical and chemical-grade compliance with full cybersecurity hardening.', c:N.green },
   ]
 
-  const process = [
-    { n: '01', icon: Wifi, title: 'Connect Everything', desc: 'OPC-UA, Modbus, MQTT — plug into any PLC, DCS, or sensor without ripping out your existing infrastructure.' },
-    { n: '02', icon: Activity, title: 'Visualize Live', desc: 'Auto-built SCADA dashboards with P&ID overlays, trend charts, and process flow animations.' },
-    { n: '03', icon: TrendingUp, title: 'Predict and Alert', desc: 'AI engine learns your process patterns and flags anomalies and failures before they cascade.' },
-    { n: '04', icon: BarChart3, title: 'Optimize Output', desc: 'Close the loop with automated responses, OEE tracking, and executive-level reporting.' },
-  ]
-
-  const industries = [
-    { icon: Pill, label: 'Pharmaceutical' },
-    { icon: Wheat, label: 'Food and Beverage' },
-    { icon: FlaskConical, label: 'Chemical' },
-    { icon: Shirt, label: 'Textiles' },
-    { icon: Car, label: 'Auto Manufacturing' },
-    { icon: Mountain, label: 'Cement' },
-    { icon: Layers, label: 'Plastics' },
-    { icon: Factory, label: 'General Mfg.' },
+  const processSteps = [
+    { n:'01', icon:Wifi, title:'Connect Everything', desc:'OPC-UA, Modbus, MQTT — plug into any PLC, DCS, or sensor without replacing your existing infrastructure.' },
+    { n:'02', icon:Activity, title:'Visualize Live', desc:'Auto-built SCADA dashboards with P&ID overlays, real-time trend charts, and alarm panels.' },
+    { n:'03', icon:TrendingUp, title:'Predict and Alert', desc:'AI learns your process patterns and flags anomalies before they cascade.' },
+    { n:'04', icon:BarChart3, title:'Optimize Output', desc:'Close the loop — automate responses, track OEE, and deliver executive-level reporting.' },
   ]
 
   const stats = [
-    { val: '50+', label: 'Plants Deployed' },
-    { val: '10K+', label: 'Tags Supported' },
-    { val: '<100ms', label: 'Latency' },
-    { val: '99.9%', label: 'Uptime' },
+    { val:'35%', label:'Reduction in unplanned downtime', dark:true },
+    { val:'94.2%', label:'Average OEE achieved on NexaProc plants', dark:false },
+    { val:'₹2.1 Cr', label:'Average annual energy savings per facility', dark:true },
+    { val:'50+', label:'Plants deployed across India and globally', dark:false },
   ]
 
-  const integrations = ['Siemens S7', 'Allen Bradley', 'Schneider', 'Modbus', 'OPC-UA', 'MQTT', 'REST API', 'Profibus']
+  const industries = [
+    { icon:Pill, label:'Pharmaceutical' }, { icon:Wheat, label:'Food and Beverage' },
+    { icon:FlaskConical, label:'Chemical' }, { icon:Shirt, label:'Textiles' },
+    { icon:Car, label:'Auto Manufacturing' }, { icon:Mountain, label:'Cement' },
+    { icon:Layers, label:'Plastics and Rubber' }, { icon:Factory, label:'General Manufacturing' },
+  ]
 
-  const BG = '#05100a'
-  const BG2 = '#071408'
-  const AMBER = '#f59e0b'
-  const ORANGE = '#ea580c'
-  const GREEN = '#16a34a'
+  const integrations = ['Siemens S7','Allen Bradley','Schneider','OPC-UA','Modbus TCP/RTU','MQTT','Profibus','IEC 61131','REST API','SAP MES']
 
   return (
-    <div style={{ background: BG, color: 'white', fontFamily: "'Inter', system-ui, sans-serif" }} className="min-h-screen">
+    <div style={{ fontFamily:"'Inter',system-ui,sans-serif", background:N.bg, color:N.white, minHeight:'100vh' }}>
 
-      {/* NAV */}
-      <nav style={{ background: 'rgba(5,16,10,0.9)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(245,158,11,0.15)' }} className="fixed top-0 w-full z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <NexaProcLogo size="compact" />
+      {/* ── NAV ── */}
+      <nav style={{ position:'fixed', top:0, width:'100%', zIndex:50, background:'rgba(5,16,10,0.9)', backdropFilter:'blur(20px)', borderBottom:`1px solid rgba(245,158,11,0.15)` }}>
+        <div style={{ maxWidth:1280, margin:'0 auto', padding:'0 24px', height:64, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+            <div style={{ width:36, height:36, borderRadius:10, background:`linear-gradient(135deg,${N.amber},${N.orange})`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 20px rgba(245,158,11,0.45)` }}>
+              <Factory size={18} color="white"/>
+            </div>
             <div>
-              <span style={{ fontWeight: 900, fontSize: 20 }}>NexaProc</span>
-              <span style={{ marginLeft: 8, fontSize: 11, color: AMBER, fontWeight: 700, letterSpacing: 2 }}>by GALVON</span>
+              <span style={{ fontWeight:900, fontSize:20 }}>NexaProc</span>
+              <span style={{ marginLeft:8, fontSize:11, color:N.amber, fontWeight:700, letterSpacing:2 }}>by GALVON</span>
             </div>
           </div>
-          <div className="hidden md:flex items-center gap-8" style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)' }}>
-            {['Features', 'Process', 'Industries', 'Integrations'].map(l => (
-              <a key={l} href={`#${l.toLowerCase()}`} style={{ transition: 'color .2s' }} onMouseOver={e => (e.currentTarget.style.color = AMBER)} onMouseOut={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}>{l}</a>
-            ))}
-            <a href="#contact" style={{ background: `linear-gradient(135deg, ${AMBER}, ${ORANGE})`, padding: '9px 22px', borderRadius: 10, fontWeight: 700, color: 'white', boxShadow: `0 0 20px rgba(245,158,11,0.35)`, textDecoration: 'none' }}>Book Demo</a>
+          <div className="hidden md:flex" style={{ gap:28, fontSize:14, color:N.muted, alignItems:'center' }}>
+            {navLinks.map(l=><a key={l} href={`#${l.toLowerCase()}`} style={{ textDecoration:'none', color:N.muted, transition:'color .2s' }} onMouseOver={e=>(e.currentTarget.style.color=N.amber)} onMouseOut={e=>(e.currentTarget.style.color=N.muted)}>{l}</a>)}
+            <a href="#contact" style={{ background:`linear-gradient(135deg,${N.amber},${N.orange})`, color:'white', padding:'9px 22px', borderRadius:8, fontWeight:700, textDecoration:'none', boxShadow:`0 0 20px rgba(245,158,11,0.35)` }}>Book Demo</a>
           </div>
-          <button className="md:hidden" style={{ color: 'white' }} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button>
+          <button className="md:hidden" style={{ color:N.white, background:'none', border:'none', cursor:'pointer' }} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?<X size={22}/>:<Menu size={22}/>}</button>
         </div>
-        {menuOpen && (
-          <div style={{ borderTop: '1px solid rgba(245,158,11,0.15)', background: 'rgba(5,16,10,0.97)', padding: '16px 24px' }} className="md:hidden flex flex-col gap-4">
-            {['Features', 'Process', 'Industries', 'Integrations', 'Contact'].map(l => (
-              <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMenuOpen(false)} style={{ color: 'rgba(255,255,255,0.65)', fontSize: 15 }}>{l}</a>
-            ))}
-          </div>
-        )}
+        {menuOpen&&<div style={{ borderTop:`1px solid rgba(245,158,11,0.15)`, padding:'16px 24px', display:'flex', flexDirection:'column', gap:14 }}>
+          {navLinks.map(l=><a key={l} href={`#${l.toLowerCase()}`} onClick={()=>setMenuOpen(false)} style={{ textDecoration:'none', color:N.muted, fontSize:15 }}>{l}</a>)}
+          <a href="#contact" style={{ background:`linear-gradient(135deg,${N.amber},${N.orange})`, color:'white', padding:'10px 20px', borderRadius:8, fontWeight:700, textDecoration:'none', textAlign:'center' }} onClick={()=>setMenuOpen(false)}>Book Demo</a>
+        </div>}
       </nav>
 
-      {/* HERO */}
-      <section style={{ minHeight: '100vh', position: 'relative', display: 'flex', alignItems: 'center', overflow: 'hidden', paddingTop: 80 }}>
-        {/* Background — nature forest glow */}
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 70% 50%, rgba(245,158,11,0.12) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(22,163,74,0.1) 0%, transparent 50%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(to top, rgba(22,163,74,0.06), transparent)', pointerEvents: 'none' }} />
+      {/* ── HERO ── */}
+      <section style={{ minHeight:'100vh', position:'relative', display:'flex', alignItems:'center', paddingTop:80, overflow:'hidden', background:`linear-gradient(160deg,#05100a 0%,#0a1a05 55%,#030a02 100%)` }}>
+        {/* Nature Phoenix glow orbs */}
+        <div style={{ position:'absolute', top:'10%', right:'3%', width:500, height:500, borderRadius:'50%', background:`radial-gradient(circle,rgba(245,158,11,0.15) 0%,transparent 70%)`, filter:'blur(60px)', pointerEvents:'none' }}/>
+        <div style={{ position:'absolute', bottom:'10%', left:'2%', width:350, height:350, borderRadius:'50%', background:`radial-gradient(circle,rgba(22,163,74,0.12) 0%,transparent 70%)`, filter:'blur(50px)', pointerEvents:'none' }}/>
+        <div style={{ position:'absolute', top:'50%', left:'50%', width:200, height:200, borderRadius:'50%', background:`radial-gradient(circle,rgba(234,88,12,0.08) 0%,transparent 70%)`, filter:'blur(40px)', pointerEvents:'none' }}/>
+        {/* Ember particles */}
+        {[...Array(30)].map((_,i)=><div key={i} style={{ position:'absolute', left:`${(i*41+9)%100}%`, top:`${(i*57+7)%100}%`, width:i%5===0?3.5:i%3===0?2:1.5, height:i%5===0?3.5:i%3===0?2:1.5, borderRadius:'50%', background:i%3===0?N.amber:i%2===0?N.orange:N.green, opacity:0.2+(i%5)*0.07, pointerEvents:'none' }}/>)}
+        {/* Dot grid */}
+        <div style={{ position:'absolute', inset:0, opacity:0.04, backgroundImage:`radial-gradient(circle,${N.amber} 1px,transparent 1px)`, backgroundSize:'48px 48px', pointerEvents:'none' }}/>
 
-        {/* Hex grid pattern */}
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: 'radial-gradient(circle, #f59e0b 1px, transparent 1px)', backgroundSize: '40px 40px', pointerEvents: 'none' }} />
-
-        {/* Floating ember particles */}
-        {[...Array(25)].map((_, i) => (
-          <div key={i} style={{ position: 'absolute', left: `${(i * 41 + 11) % 100}%`, top: `${(i * 57 + 9) % 100}%`, width: i % 4 === 0 ? 4 : i % 3 === 0 ? 2.5 : 1.5, height: i % 4 === 0 ? 4 : i % 3 === 0 ? 2.5 : 1.5, borderRadius: '50%', background: i % 3 === 0 ? AMBER : i % 2 === 0 ? ORANGE : GREEN, opacity: 0.25 + (i % 5) * 0.08, pointerEvents: 'none' }} />
-        ))}
-
-        <div className="max-w-7xl mx-auto px-6 w-full py-16" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
-          {/* Text left */}
+        <div style={{ maxWidth:1280, margin:'0 auto', padding:'48px 24px', width:'100%', display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
           <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.35)', borderRadius: 100, padding: '6px 18px', fontSize: 13, color: AMBER, fontWeight: 700, marginBottom: 28, letterSpacing: 1 }}>
-              <Factory size={13} /> Factory Automation SCADA
+            <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(245,158,11,0.1)', border:`1px solid rgba(245,158,11,0.35)`, borderRadius:100, padding:'6px 16px', fontSize:13, color:N.amber, marginBottom:28, fontWeight:600 }}>
+              <Factory size={13}/> Factory and Process Automation SCADA
             </div>
-            <h1 style={{ fontSize: 'clamp(44px, 5.5vw, 72px)', fontWeight: 900, lineHeight: 1.05, letterSpacing: '-1px', marginBottom: 24 }}>
-              <span style={{ background: `linear-gradient(135deg, #fbbf24, ${AMBER})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Nexa</span>
-              <span style={{ background: `linear-gradient(135deg, ${ORANGE}, #dc2626)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Proc</span>
-              <br />
-              <span style={{ fontSize: '50%', color: 'rgba(255,255,255,0.8)', fontWeight: 700, letterSpacing: 0 }}>Born from nature's power.</span>
+            <h1 style={{ fontSize:'clamp(34px,5vw,62px)', fontWeight:900, lineHeight:1.06, marginBottom:20, letterSpacing:'-1px' }}>
+              <span style={{ background:`linear-gradient(135deg,${N.gold},${N.amber},${N.orange})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>{heroSub}</span>
             </h1>
-            <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.6)', lineHeight: 1.75, marginBottom: 32, maxWidth: 460 }}>{heroSub}</p>
-            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-              <a href="#contact" style={{ display: 'flex', alignItems: 'center', gap: 8, background: `linear-gradient(135deg, ${AMBER}, ${ORANGE})`, padding: '14px 28px', borderRadius: 12, fontWeight: 700, fontSize: 15, boxShadow: `0 0 30px rgba(245,158,11,0.4)`, color: 'white', textDecoration: 'none' }}>
-                Book Live Demo <ArrowRight size={18} />
-              </a>
-              <a href="#features" style={{ display: 'flex', alignItems: 'center', gap: 8, border: '1px solid rgba(245,158,11,0.3)', padding: '14px 28px', borderRadius: 12, fontWeight: 600, fontSize: 15, color: 'rgba(255,255,255,0.75)', textDecoration: 'none' }}>
-                Explore Features
-              </a>
-            </div>
-
-            {/* Mini stats */}
-            <div style={{ display: 'flex', gap: 32, marginTop: 48 }}>
-              {stats.slice(0, 3).map(s => (
-                <div key={s.label}>
-                  <div style={{ fontSize: 28, fontWeight: 900, background: `linear-gradient(135deg, #fbbf24, ${ORANGE})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{s.val}</div>
-                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{s.label}</div>
-                </div>
+            <p style={{ fontSize:17, color:N.muted, lineHeight:1.75, marginBottom:14, maxWidth:480 }}>
+              NexaProc monitors, controls, and optimises every process in your plant — from raw material to finished product — with the precision of nature's own intelligence.
+            </p>
+            {/* Trust bar */}
+            <div style={{ display:'flex', gap:18, flexWrap:'wrap', marginBottom:36, fontSize:13, color:N.dim }}>
+              {['50+ Plants Deployed','94.2% Avg OEE','ISA-88 Compliant','FDA 21 CFR Part 11'].map(t=>(
+                <span key={t} style={{ display:'flex', alignItems:'center', gap:5 }}><CheckCircle size={12} style={{ color:N.lime }}/>{t}</span>
               ))}
             </div>
-          </div>
-
-          {/* Phoenix right */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
-            <div style={{ position: 'absolute', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,158,11,0.25) 0%, transparent 70%)', filter: 'blur(40px)' }} />
-            <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: 480 }}>
-              <NexaProcDashboard />
+            <div style={{ display:'flex', gap:14, flexWrap:'wrap' }}>
+              <a href="#contact" style={{ display:'flex', alignItems:'center', gap:8, background:`linear-gradient(135deg,${N.amber},${N.orange})`, color:'white', padding:'14px 28px', borderRadius:10, fontWeight:700, fontSize:15, textDecoration:'none', boxShadow:`0 6px 24px rgba(245,158,11,0.4)` }}>
+                Book Live Demo <ArrowRight size={18}/>
+              </a>
+              <a href="#features" style={{ display:'flex', alignItems:'center', gap:8, border:`1px solid rgba(245,158,11,0.3)`, color:N.muted, padding:'14px 22px', borderRadius:10, fontWeight:600, fontSize:15, textDecoration:'none' }}>
+                <Download size={16}/> Technical Specs
+              </a>
+            </div>
+            <div style={{ marginTop:20, fontSize:13, color:N.dim }}>
+              <Phone size={13} style={{ display:'inline', marginRight:6, color:N.lime }}/> WhatsApp: <a href="https://wa.me/919373111709" style={{ color:N.amber, textDecoration:'none' }}>+91 93731 11709</a>
             </div>
           </div>
-        </div>
-
-        {/* Scroll hint */}
-        <div style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', color: 'rgba(255,255,255,0.25)' }}>
-          <ChevronDown size={28} />
-        </div>
-      </section>
-
-      <WaveDivider from={BG} to={BG2} />
-
-      {/* STATS BAR */}
-      <section style={{ background: BG2, padding: '48px 24px', borderTop: '1px solid rgba(245,158,11,0.08)' }}>
-        <div className="max-w-5xl mx-auto" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24, textAlign: 'center' }}>
-          {stats.map(s => (
-            <div key={s.label}>
-              <div style={{ fontSize: 36, fontWeight: 900, background: `linear-gradient(135deg, #fbbf24, ${ORANGE})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{s.val}</div>
-              <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, marginTop: 4 }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <WaveDivider from={BG2} to={BG} flip />
-
-      {/* FEATURES */}
-      <section id="features" style={{ background: BG, padding: '80px 0' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div style={{ textAlign: 'center', marginBottom: 60 }}>
-            <div style={{ display: 'inline-block', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: 100, padding: '5px 20px', fontSize: 12, color: AMBER, fontWeight: 700, letterSpacing: 3, marginBottom: 16 }}>PLATFORM FEATURES</div>
-            <h2 style={{ fontSize: 'clamp(30px, 4vw, 48px)', fontWeight: 900 }}>Engineered for process engineers</h2>
-            <p style={{ color: 'rgba(255,255,255,0.45)', marginTop: 12, fontSize: 16 }}>Everything you need to run a smarter, leaner plant.</p>
+          <div style={{ display:'flex', justifyContent:'center' }}>
+            <ProcessMonitorMockup/>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: 20 }}>
-            {features.map((f, i) => (
-              <div key={f.title} style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid rgba(245,158,11,${i % 2 === 0 ? '0.15' : '0.1'})`, borderRadius: 18, padding: 28, transition: 'all .3s', cursor: 'default' }}
-                onMouseOver={e => { e.currentTarget.style.borderColor = `rgba(245,158,11,0.45)`; e.currentTarget.style.background = 'rgba(245,158,11,0.05)'; e.currentTarget.style.transform = 'translateY(-4px)' }}
-                onMouseOut={e => { e.currentTarget.style.borderColor = `rgba(245,158,11,${i % 2 === 0 ? '0.15' : '0.1'})`; e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; e.currentTarget.style.transform = 'translateY(0)' }}>
-                <div style={{ width: 52, height: 52, borderRadius: 14, background: i % 2 === 0 ? 'rgba(245,158,11,0.12)' : 'rgba(22,163,74,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
-                  <f.icon size={24} style={{ color: i % 2 === 0 ? AMBER : GREEN }} />
+        </div>
+
+        <div style={{ position:'absolute', bottom:28, left:'50%', transform:'translateX(-50%)', color:N.dim }}>
+          <ChevronDown size={26}/>
+        </div>
+      </section>
+
+      {/* ── CLIENT BAR ── */}
+      <section style={{ background:N.bg2, padding:'26px 24px', borderBottom:`1px solid rgba(245,158,11,0.08)` }}>
+        <div style={{ maxWidth:1280, margin:'0 auto', textAlign:'center' }}>
+          <p style={{ fontSize:11, letterSpacing:3, color:N.dim, marginBottom:16 }}>TRUSTED BY INDIA'S LEADING MANUFACTURERS</p>
+          <div style={{ display:'flex', flexWrap:'wrap', justifyContent:'center', gap:'12px 36px' }}>
+            {['Sun Pharma','Tata Chemicals','Hindustan Unilever','UltraTech Cement','Godrej Industries','Asian Paints'].map(n=>(
+              <span key={n} style={{ fontSize:13, fontWeight:700, color:'rgba(255,255,255,0.12)', letterSpacing:1 }}>{n}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <WaveDivider from={N.bg2} to={N.bg}/>
+
+      {/* ── PROBLEM ── */}
+      <section style={{ background:N.bg, padding:'80px 24px' }}>
+        <div style={{ maxWidth:1280, margin:'0 auto' }}>
+          <div style={{ textAlign:'center', marginBottom:52 }}>
+            <div style={{ display:'inline-block', background:'rgba(245,158,11,0.1)', border:`1px solid rgba(245,158,11,0.3)`, borderRadius:100, padding:'5px 18px', fontSize:11, color:N.amber, fontWeight:700, letterSpacing:3, marginBottom:16 }}>THE PROBLEM</div>
+            <h2 style={{ fontSize:'clamp(28px,4vw,44px)', fontWeight:900, marginBottom:12 }}>Process Blindness Is Costing You Every Shift</h2>
+            <p style={{ color:N.muted, maxWidth:520, margin:'0 auto', fontSize:16, lineHeight:1.7 }}>Without real-time visibility, every batch is a gamble. NexaProc was built to end that.</p>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:20 }}>
+            {problems.map(p=>(
+              <div key={p.label} style={{ background:'rgba(255,255,255,0.02)', border:`1px solid rgba(245,158,11,0.15)`, borderRadius:16, padding:'32px 28px' }}>
+                <div style={{ width:52, height:52, borderRadius:14, background:'rgba(245,158,11,0.1)', display:'flex', alignItems:'center', justifyContent:'center', marginBottom:16 }}>
+                  <p.icon size={24} style={{ color:N.amber }}/>
                 </div>
-                <h3 style={{ fontWeight: 700, fontSize: 17, marginBottom: 10 }}>{f.title}</h3>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, lineHeight: 1.65 }}>{f.desc}</p>
+                <div style={{ fontSize:40, fontWeight:900, background:`linear-gradient(135deg,${N.gold},${N.orange})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', marginBottom:8 }}>{p.stat}</div>
+                <p style={{ color:N.muted, fontSize:15, lineHeight:1.6 }}>{p.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <WaveDivider from={BG} to={BG2} />
+      <WaveDivider from={N.bg} to={N.bg2}/>
 
-      {/* PROCESS */}
-      <section id="process" style={{ background: BG2, padding: '80px 0' }}>
-        <div className="max-w-6xl mx-auto px-6">
-          <div style={{ textAlign: 'center', marginBottom: 64 }}>
-            <div style={{ display: 'inline-block', background: 'rgba(22,163,74,0.1)', border: '1px solid rgba(22,163,74,0.3)', borderRadius: 100, padding: '5px 20px', fontSize: 12, color: '#4ade80', fontWeight: 700, letterSpacing: 3, marginBottom: 16 }}>HOW IT WORKS</div>
-            <h2 style={{ fontSize: 'clamp(28px, 4vw, 46px)', fontWeight: 900 }}>From installation to full control — 4 steps</h2>
+      {/* ── FEATURES ── */}
+      <section id="features" style={{ background:N.bg2, padding:'80px 24px' }}>
+        <div style={{ maxWidth:1280, margin:'0 auto' }}>
+          <div style={{ textAlign:'center', marginBottom:52 }}>
+            <div style={{ display:'inline-block', background:'rgba(22,163,74,0.1)', border:`1px solid rgba(22,163,74,0.3)`, borderRadius:100, padding:'5px 18px', fontSize:11, color:N.lime, fontWeight:700, letterSpacing:3, marginBottom:16 }}>PLATFORM FEATURES</div>
+            <h2 style={{ fontSize:'clamp(28px,4vw,44px)', fontWeight:900, marginBottom:12 }}>Engineered for Process Engineers</h2>
+            <p style={{ color:N.muted, maxWidth:480, margin:'0 auto', fontSize:16 }}>Every feature built for the realities of industrial plant operations.</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 8, position: 'relative' }}>
-            <div style={{ position: 'absolute', top: 42, left: '12%', right: '12%', height: 2, background: `linear-gradient(90deg, ${GREEN}, ${AMBER}, ${ORANGE})`, opacity: 0.25 }} className="hidden md:block" />
-            {process.map((p, i) => (
-              <div key={p.n} style={{ textAlign: 'center', padding: '0 12px', position: 'relative', zIndex: 1 }}>
-                <div style={{ width: 84, height: 84, borderRadius: '50%', background: `radial-gradient(circle, rgba(245,158,11,0.15) 0%, rgba(22,163,74,0.08) 100%)`, border: `2px solid ${i < 2 ? AMBER : ORANGE}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 22px', flexDirection: 'column', gap: 2, boxShadow: `0 0 24px rgba(245,158,11,0.2)` }}>
-                  <p.icon size={22} style={{ color: i < 2 ? AMBER : ORANGE }} />
-                  <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontWeight: 700 }}>{p.n}</span>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))', gap:18 }}>
+            {features.map(f=>(
+              <div key={f.title} style={{ background:'rgba(255,255,255,0.02)', border:`1px solid rgba(245,158,11,0.12)`, borderRadius:16, padding:26, transition:'all .25s' }}
+                onMouseOver={e=>{e.currentTarget.style.borderColor=`${f.c}55`;e.currentTarget.style.background=`${f.c}06`;e.currentTarget.style.transform='translateY(-4px)'}}
+                onMouseOut={e=>{e.currentTarget.style.borderColor='rgba(245,158,11,0.12)';e.currentTarget.style.background='rgba(255,255,255,0.02)';e.currentTarget.style.transform='translateY(0)'}}>
+                <div style={{ width:48, height:48, borderRadius:12, background:`${f.c}12`, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:16 }}>
+                  <f.icon size={22} style={{ color:f.c }}/>
                 </div>
-                <h3 style={{ fontWeight: 800, fontSize: 18, marginBottom: 10, color: 'white' }}>{p.title}</h3>
-                <p style={{ color: 'rgba(255,255,255,0.48)', fontSize: 14, lineHeight: 1.65 }}>{p.desc}</p>
+                <h3 style={{ fontWeight:700, fontSize:16, marginBottom:8 }}>{f.title}</h3>
+                <p style={{ color:N.muted, fontSize:14, lineHeight:1.65 }}>{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <WaveDivider from={BG2} to={BG} flip />
+      <WaveDivider from={N.bg2} to={N.bg}/>
 
-      {/* INDUSTRIES */}
-      <section id="industries" style={{ background: BG, padding: '80px 0' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div style={{ textAlign: 'center', marginBottom: 50 }}>
-            <h2 style={{ fontSize: 'clamp(28px, 4vw, 46px)', fontWeight: 900, marginBottom: 12 }}>Industries We Serve</h2>
-            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 16 }}>NexaProc adapts to your industry's unique process environment.</p>
+      {/* ── ROI ── */}
+      <section style={{ background:N.bg, padding:'80px 24px' }}>
+        <div style={{ maxWidth:1280, margin:'0 auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
+          <div>
+            <div style={{ display:'inline-block', background:'rgba(245,158,11,0.1)', border:`1px solid rgba(245,158,11,0.3)`, borderRadius:100, padding:'5px 18px', fontSize:11, color:N.amber, fontWeight:700, letterSpacing:3, marginBottom:16 }}>PROVEN ROI</div>
+            <h2 style={{ fontSize:'clamp(28px,4vw,44px)', fontWeight:900, marginBottom:16 }}>The NexaProc Impact — By the Numbers</h2>
+            <p style={{ color:N.muted, fontSize:16, lineHeight:1.75, marginBottom:28 }}>Plants running on NexaProc consistently outperform industry benchmarks on OEE, energy efficiency, and uptime.</p>
+            <a href="#contact" style={{ display:'inline-flex', alignItems:'center', gap:8, background:`linear-gradient(135deg,${N.amber},${N.orange})`, color:'white', padding:'13px 26px', borderRadius:10, fontWeight:700, fontSize:15, textDecoration:'none' }}>
+              Calculate Your ROI <ArrowRight size={17}/>
+            </a>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16 }}>
-            {industries.map((ind, i) => (
-              <div key={ind.label} style={{ border: '1px solid rgba(245,158,11,0.15)', borderRadius: 16, padding: '24px 14px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', transition: 'all .3s' }}
-                onMouseOver={e => { e.currentTarget.style.borderColor = AMBER; e.currentTarget.style.background = 'rgba(245,158,11,0.07)'; e.currentTarget.style.transform = 'scale(1.04)' }}
-                onMouseOut={e => { e.currentTarget.style.borderColor = 'rgba(245,158,11,0.15)'; e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; e.currentTarget.style.transform = 'scale(1)' }}>
-                <ind.icon size={30} style={{ color: i % 2 === 0 ? AMBER : GREEN, marginBottom: 10 }} />
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.7)' }}>{ind.label}</div>
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
+            {stats.map((s)=>(
+              <div key={s.label} style={{ background:s.dark?`linear-gradient(135deg,rgba(245,158,11,0.2),rgba(22,163,74,0.12))`:'rgba(255,255,255,0.03)', border:s.dark?`1px solid rgba(245,158,11,0.3)`:`1px solid rgba(255,255,255,0.06)`, borderRadius:16, padding:'28px 22px' }}>
+                <div style={{ fontSize:36, fontWeight:900, background:`linear-gradient(135deg,${N.gold},${N.orange})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', marginBottom:8 }}>{s.val}</div>
+                <p style={{ color:N.muted, fontSize:14, lineHeight:1.5 }}>{s.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <WaveDivider from={BG} to={BG2} />
+      <WaveDivider from={N.bg} to={N.bg2}/>
 
-      {/* INTEGRATIONS */}
-      <section id="integrations" style={{ background: BG2, padding: '80px 0' }}>
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <div style={{ display: 'inline-block', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.25)', borderRadius: 100, padding: '5px 20px', fontSize: 12, color: AMBER, fontWeight: 700, letterSpacing: 3, marginBottom: 20 }}>INTEGRATIONS</div>
-          <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 900, marginBottom: 14 }}>Works with your existing infrastructure</h2>
-          <p style={{ color: 'rgba(255,255,255,0.45)', marginBottom: 44, fontSize: 16 }}>No rip-and-replace. NexaProc connects natively to every major industrial protocol.</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12 }}>
-            {integrations.map(name => (
-              <div key={name} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: 12, padding: '10px 22px', color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontSize: 14, transition: 'all .25s' }}
-                onMouseOver={e => { e.currentTarget.style.borderColor = AMBER; e.currentTarget.style.color = AMBER }}
-                onMouseOut={e => { e.currentTarget.style.borderColor = 'rgba(245,158,11,0.2)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)' }}>
-                {name}
+      {/* ── PROCESS ── */}
+      <section id="process" style={{ background:N.bg2, padding:'80px 24px' }}>
+        <div style={{ maxWidth:1100, margin:'0 auto' }}>
+          <div style={{ textAlign:'center', marginBottom:60 }}>
+            <div style={{ display:'inline-block', background:'rgba(22,163,74,0.08)', border:`1px solid rgba(22,163,74,0.3)`, borderRadius:100, padding:'5px 18px', fontSize:11, color:N.lime, fontWeight:700, letterSpacing:3, marginBottom:16 }}>HOW IT WORKS</div>
+            <h2 style={{ fontSize:'clamp(28px,4vw,44px)', fontWeight:900, marginBottom:12 }}>From Installation to Full Control — 4 Steps</h2>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:8, position:'relative' }}>
+            <div style={{ position:'absolute', top:42, left:'12%', right:'12%', height:2, background:`linear-gradient(90deg,${N.green},${N.amber},${N.orange})`, opacity:0.25 }} className="hidden md:block"/>
+            {processSteps.map((p,i)=>(
+              <div key={p.n} style={{ textAlign:'center', padding:'0 12px', position:'relative', zIndex:1 }}>
+                <div style={{ width:84, height:84, borderRadius:'50%', background:`radial-gradient(circle,rgba(245,158,11,0.12) 0%,rgba(22,163,74,0.06) 100%)`, border:`2px solid ${i<2?N.amber:N.orange}`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', flexDirection:'column', gap:2, boxShadow:`0 0 24px rgba(245,158,11,0.18)` }}>
+                  <p.icon size={24} style={{ color:i<2?N.amber:N.orange }}/>
+                  <span style={{ fontSize:10, color:N.dim, fontWeight:700 }}>{p.n}</span>
+                </div>
+                <h3 style={{ fontWeight:800, fontSize:17, marginBottom:10 }}>{p.title}</h3>
+                <p style={{ color:N.muted, fontSize:14, lineHeight:1.65 }}>{p.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <WaveDivider from={BG2} to='#070d05' flip />
+      <WaveDivider from={N.bg2} to={N.bg}/>
 
-      {/* CTA */}
-      <section id="contact" style={{ background: '#070d05', padding: '100px 24px', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(245,158,11,0.12) 0%, transparent 65%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 200, background: 'linear-gradient(to top, rgba(22,163,74,0.05), transparent)', pointerEvents: 'none' }} />
-        <div style={{ maxWidth: 660, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <CheckCircle size={48} style={{ color: AMBER, margin: '0 auto 24px' }} />
-          <h2 style={{ fontSize: 'clamp(30px, 5vw, 52px)', fontWeight: 900, lineHeight: 1.1, marginBottom: 20 }}>
-            Start your <span style={{ background: `linear-gradient(135deg, #fbbf24, ${ORANGE})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>digital plant</span> transformation
+      {/* ── INDUSTRIES ── */}
+      <section id="industries" style={{ background:N.bg, padding:'80px 24px' }}>
+        <div style={{ maxWidth:1280, margin:'0 auto', textAlign:'center' }}>
+          <h2 style={{ fontSize:'clamp(28px,4vw,44px)', fontWeight:900, marginBottom:12 }}>Industries We Serve</h2>
+          <p style={{ color:N.muted, marginBottom:44, fontSize:16 }}>NexaProc adapts to your industry's unique process environment and compliance requirements.</p>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))', gap:14 }}>
+            {industries.map((ind,i)=>(
+              <div key={ind.label} style={{ border:`1px solid rgba(245,158,11,0.12)`, borderRadius:14, padding:'22px 12px', transition:'all .25s' }}
+                onMouseOver={e=>{e.currentTarget.style.borderColor=i%2===0?N.amber:N.lime;e.currentTarget.style.background=i%2===0?`${N.amber}07`:`${N.green}07`;e.currentTarget.style.transform='scale(1.04)'}}
+                onMouseOut={e=>{e.currentTarget.style.borderColor='rgba(245,158,11,0.12)';e.currentTarget.style.background='transparent';e.currentTarget.style.transform='scale(1)'}}>
+                <ind.icon size={28} style={{ color:i%2===0?N.amber:N.lime, marginBottom:10 }}/>
+                <div style={{ fontSize:13, fontWeight:600, color:N.muted }}>{ind.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <WaveDivider from={N.bg} to={N.bg2}/>
+
+      {/* ── INTEGRATIONS ── */}
+      <section id="integrations" style={{ background:N.bg2, padding:'80px 24px' }}>
+        <div style={{ maxWidth:900, margin:'0 auto', textAlign:'center' }}>
+          <h2 style={{ fontSize:'clamp(26px,4vw,40px)', fontWeight:900, marginBottom:12 }}>Works with Your Existing Infrastructure</h2>
+          <p style={{ color:N.muted, marginBottom:44, fontSize:16 }}>No rip-and-replace. NexaProc connects natively to every major PLC brand and industrial protocol.</p>
+          <div style={{ display:'flex', flexWrap:'wrap', justifyContent:'center', gap:12 }}>
+            {integrations.map(n=>(
+              <div key={n} style={{ background:'rgba(255,255,255,0.03)', border:`1px solid rgba(245,158,11,0.2)`, borderRadius:10, padding:'10px 22px', color:N.muted, fontWeight:600, fontSize:14, transition:'all .2s' }}
+                onMouseOver={e=>{e.currentTarget.style.borderColor=N.amber;e.currentTarget.style.color=N.amber}}
+                onMouseOut={e=>{e.currentTarget.style.borderColor='rgba(245,158,11,0.2)';e.currentTarget.style.color=N.muted}}>
+                {n}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <WaveDivider from={N.bg2} to='#070d05'/>
+
+      {/* ── CTA ── */}
+      <section id="contact" style={{ background:'#070d05', padding:'100px 24px', position:'relative', overflow:'hidden' }}>
+        <div style={{ position:'absolute', inset:0, background:`radial-gradient(ellipse at center,rgba(245,158,11,0.12) 0%,transparent 65%)`, pointerEvents:'none' }}/>
+        <div style={{ position:'absolute', bottom:0, left:0, right:0, height:200, background:`linear-gradient(to top,rgba(22,163,74,0.05),transparent)`, pointerEvents:'none' }}/>
+        <div style={{ maxWidth:660, margin:'0 auto', textAlign:'center', position:'relative', zIndex:1 }}>
+          <CheckCircle size={48} style={{ color:N.amber, margin:'0 auto 24px' }}/>
+          <h2 style={{ fontSize:'clamp(30px,5vw,52px)', fontWeight:900, lineHeight:1.1, marginBottom:20 }}>
+            Start Your Digital Plant Transformation
           </h2>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 17, lineHeight: 1.75, marginBottom: 42 }}>See NexaProc live on a plant similar to yours. Our team sets up a demo environment in 24 hours.</p>
-          <a href="mailto:hello@galvon.com" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: `linear-gradient(135deg, ${AMBER}, ${ORANGE})`, padding: '16px 38px', borderRadius: 14, fontWeight: 800, fontSize: 17, color: 'white', boxShadow: `0 0 40px rgba(245,158,11,0.4)`, textDecoration: 'none' }}>
-            Book a Demo <ArrowRight size={20} />
-          </a>
+          <p style={{ color:N.muted, fontSize:17, lineHeight:1.75, marginBottom:40 }}>Our team sets up a live demo on a plant similar to yours — within 24 hours. No commitment required.</p>
+          <div style={{ display:'flex', gap:14, justifyContent:'center', flexWrap:'wrap' }}>
+            <a href="mailto:hello@galvon.com" style={{ display:'inline-flex', alignItems:'center', gap:10, background:`linear-gradient(135deg,${N.amber},${N.orange})`, color:'white', padding:'16px 36px', borderRadius:12, fontWeight:800, fontSize:17, textDecoration:'none', boxShadow:`0 8px 28px rgba(245,158,11,0.4)` }}>
+              Book a Demo <ArrowRight size={20}/>
+            </a>
+            <a href="https://wa.me/919373111709" style={{ display:'inline-flex', alignItems:'center', gap:8, border:`1px solid rgba(245,158,11,0.35)`, color:N.muted, padding:'16px 28px', borderRadius:12, fontWeight:600, fontSize:16, textDecoration:'none' }}>
+              <Phone size={18}/> WhatsApp Us
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer style={{ background: '#030a02', borderTop: '1px solid rgba(245,158,11,0.1)', padding: '40px 24px' }}>
-        <div className="max-w-7xl mx-auto" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <NexaProcLogo size="compact" />
+      {/* ── FOOTER ── */}
+      <footer style={{ background:'#030a02', borderTop:`1px solid rgba(245,158,11,0.1)`, padding:'40px 24px' }}>
+        <div style={{ maxWidth:1280, margin:'0 auto', display:'flex', flexWrap:'wrap', alignItems:'center', justifyContent:'space-between', gap:20 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+            <div style={{ width:32, height:32, borderRadius:10, background:`linear-gradient(135deg,${N.amber},${N.orange})`, display:'flex', alignItems:'center', justifyContent:'center' }}>
+              <Factory size={15} color="white"/>
+            </div>
             <div>
-              <span style={{ fontWeight: 900, fontSize: 18 }}>NexaProc</span>
-              <span style={{ marginLeft: 8, fontSize: 11, color: AMBER, fontWeight: 700 }}>by GALVON</span>
+              <span style={{ fontWeight:900, fontSize:18 }}>NexaProc</span>
+              <span style={{ marginLeft:8, fontSize:11, color:N.amber, fontWeight:700 }}>by GALVON</span>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 24, fontSize: 14, color: 'rgba(255,255,255,0.35)' }}>
-            {['Ampris', 'FlowNexus', 'NexaProc'].map(n => <span key={n} style={n === 'NexaProc' ? { color: AMBER } : {}}>{n}</span>)}
+          <div style={{ display:'flex', gap:24, fontSize:13, color:N.dim }}>
+            {['Ampris','FlowNexus','NexaProc','Industries','About','Contact'].map(n=><a key={n} href={`#${n.toLowerCase()}`} style={{ textDecoration:'none', color:N.dim, transition:'color .2s' }} onMouseOver={e=>(e.currentTarget.style.color=N.amber)} onMouseOut={e=>(e.currentTarget.style.color=N.dim)}>{n}</a>)}
           </div>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>drmhope.com | A Bettroi Product</div>
-            <div style={{ color: 'rgba(255,255,255,0.2)', fontSize: 11, marginTop: 4 }}>v{VERSION} | {BUILD_DATE} | nexaproc</div>
+          <div style={{ textAlign:'right' }}>
+            <div style={{ color:N.dim, fontSize:13 }}>drmhope.com | A Bettroi Product</div>
+            <div style={{ color:'rgba(255,255,255,0.18)', fontSize:11, marginTop:4 }}>v{VERSION} | {BUILD_DATE} | nexaproc</div>
           </div>
         </div>
       </footer>
