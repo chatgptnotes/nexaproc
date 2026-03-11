@@ -14,6 +14,91 @@ async function fetchGeminiText(prompt: string, fallback: string): Promise<string
   } catch { return fallback }
 }
 
+// ── NEXAPROC LOGO — Nature Phoenix colour theme ──────────────────────────────
+function NexaProcLogo({ size = 'full' }: { size?: 'full' | 'compact' }) {
+  if (size === 'compact') {
+    return (
+      <svg viewBox="0 0 44 44" width="36" height="36" style={{ overflow: 'visible' }}>
+        <defs>
+          <linearGradient id="npIcon" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#f59e0b"/><stop offset="100%" stopColor="#ea580c"/>
+          </linearGradient>
+          <filter id="npGlow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        {/* gear teeth */}
+        {[0,45,90,135,180,225,270,315].map((deg,i)=>{
+          const r=Math.PI*deg/180; const x=22+18*Math.cos(r); const y=22+18*Math.sin(r)
+          return <line key={i} x1={22+13*Math.cos(r)} y1={22+13*Math.sin(r)} x2={x} y2={y} stroke="#f59e0b" strokeWidth="3.5" strokeLinecap="round" opacity="0.7"/>
+        })}
+        <circle cx="22" cy="22" r="13" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" strokeWidth="1.5"/>
+        <circle cx="22" cy="22" r="9" fill="#071408"/>
+        <text x="22" y="22" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="9" fill="url(#npIcon)" textAnchor="middle" dominantBaseline="middle" filter="url(#npGlow)">NP</text>
+      </svg>
+    )
+  }
+  return (
+    <svg viewBox="0 0 600 220" width="100%" style={{ maxWidth: 560, display: 'block' }}>
+      <defs>
+        <linearGradient id="npGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#ea580c"/>
+        </linearGradient>
+        <linearGradient id="npLine" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#f59e0b"/><stop offset="100%" stopColor="#fbbf24"/>
+        </linearGradient>
+        <filter id="npGlowF"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="npSoft"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+
+      {/* Gear outer ring */}
+      <circle cx="75" cy="75" r="68" fill="none" stroke="#f59e0b" strokeWidth="1" opacity="0.15"/>
+      <circle cx="75" cy="75" r="55" fill="rgba(245,158,11,0.06)" stroke="#f59e0b" strokeWidth="1.5" opacity="0.3"/>
+
+      {/* Gear teeth – 8 directions */}
+      {[0,45,90,135,180,225,270,315].map((deg,i)=>{
+        const r=Math.PI*deg/180
+        const x1=75+42*Math.cos(r), y1=75+42*Math.sin(r)
+        const x2=75+58*Math.cos(r), y2=75+58*Math.sin(r)
+        return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#f59e0b" strokeWidth="7" strokeLinecap="round" opacity="0.5"/>
+      })}
+
+      {/* Gear inner circle */}
+      <circle cx="75" cy="75" r="38" fill="#05100a" stroke="#f59e0b" strokeWidth="2"/>
+
+      {/* Nature leaf accents around gear */}
+      <path d="M40 40 Q30 25 45 28 Q42 38 40 40 Z" fill="#16a34a" opacity="0.5"/>
+      <path d="M110 40 Q120 25 105 28 Q108 38 110 40 Z" fill="#16a34a" opacity="0.5"/>
+      <path d="M28 80 Q12 72 18 85 Q24 86 28 80 Z" fill="#22c55e" opacity="0.4"/>
+      <path d="M122 80 Q138 72 132 85 Q126 86 122 80 Z" fill="#22c55e" opacity="0.4"/>
+
+      {/* NP Monogram */}
+      <text x="75" y="79" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="30" fill="url(#npGrad)" textAnchor="middle" dominantBaseline="middle" filter="url(#npGlowF)">NP</text>
+
+      {/* Process flow dotted arcs */}
+      <path d="M30 30 Q75 5 120 30" fill="none" stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.3"/>
+      <path d="M120 120 Q75 145 30 120" fill="none" stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.3"/>
+
+      {/* Wordmark NexaProc */}
+      <text x="162" y="88" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="60" dominantBaseline="middle">
+        <tspan fill="white">Nexa</tspan><tspan fill="url(#npGrad)">Proc</tspan>
+      </text>
+
+      {/* Tagline */}
+      <text x="165" y="130" fontFamily="Arial, sans-serif" fontWeight="400" fontSize="14" letterSpacing="4" fill="#f59e0b" dominantBaseline="middle">FACTORY AUTOMATION SCADA</text>
+
+      {/* Accent line */}
+      <rect x="165" y="145" width="345" height="1.5" rx="1" fill="url(#npLine)" opacity="0.55"/>
+
+      {/* by GALVON badge */}
+      <rect x="165" y="160" width="92" height="22" rx="11" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" strokeWidth="1"/>
+      <text x="211" y="171" fontFamily="Arial, sans-serif" fontSize="10" fontWeight="700" fill="#fbbf24" textAnchor="middle" dominantBaseline="middle" letterSpacing="2">by GALVON</text>
+
+      {/* green leaf dot accents */}
+      <circle cx="270" cy="171" r="3" fill="#16a34a" opacity="0.5"/>
+      <circle cx="280" cy="171" r="2" fill="#22c55e" opacity="0.4"/>
+    </svg>
+  )
+}
+
 function NaturePhoenix() {
   return (
     <svg viewBox="-150 -110 300 300" width="100%" height="100%" style={{ overflow: 'visible', maxWidth: 520 }}>
@@ -198,9 +283,7 @@ export default function App() {
       <nav style={{ background: 'rgba(5,16,10,0.9)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(245,158,11,0.15)' }} className="fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div style={{ background: `linear-gradient(135deg, ${AMBER}, ${ORANGE})`, boxShadow: `0 0 20px rgba(245,158,11,0.5)`, width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Factory size={18} color="white" />
-            </div>
+            <NexaProcLogo size="compact" />
             <div>
               <span style={{ fontWeight: 900, fontSize: 20 }}>NexaProc</span>
               <span style={{ marginLeft: 8, fontSize: 11, color: AMBER, fontWeight: 700, letterSpacing: 2 }}>by GALVON</span>
@@ -249,7 +332,12 @@ export default function App() {
               <br />
               <span style={{ fontSize: '50%', color: 'rgba(255,255,255,0.8)', fontWeight: 700, letterSpacing: 0 }}>Born from nature's power.</span>
             </h1>
-            <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.6)', lineHeight: 1.75, marginBottom: 36, maxWidth: 460 }}>{heroSub}</p>
+            <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.6)', lineHeight: 1.75, marginBottom: 32, maxWidth: 460 }}>{heroSub}</p>
+
+            {/* Brand logo block */}
+            <div style={{ marginBottom: 32, padding: '20px 24px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.18)', borderRadius: 16, display: 'inline-block' }}>
+              <NexaProcLogo size="full" />
+            </div>
 
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               <a href="#contact" style={{ display: 'flex', alignItems: 'center', gap: 8, background: `linear-gradient(135deg, ${AMBER}, ${ORANGE})`, padding: '14px 28px', borderRadius: 12, fontWeight: 700, fontSize: 15, boxShadow: `0 0 30px rgba(245,158,11,0.4)`, color: 'white', textDecoration: 'none' }}>
@@ -415,9 +503,7 @@ export default function App() {
       <footer style={{ background: '#030a02', borderTop: '1px solid rgba(245,158,11,0.1)', padding: '40px 24px' }}>
         <div className="max-w-7xl mx-auto" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ background: `linear-gradient(135deg, ${AMBER}, ${ORANGE})`, width: 32, height: 32, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Factory size={16} color="white" />
-            </div>
+            <NexaProcLogo size="compact" />
             <div>
               <span style={{ fontWeight: 900, fontSize: 18 }}>NexaProc</span>
               <span style={{ marginLeft: 8, fontSize: 11, color: AMBER, fontWeight: 700 }}>by GALVON</span>
