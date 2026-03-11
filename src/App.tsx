@@ -99,122 +99,107 @@ function NexaProcLogo({ size = 'full' }: { size?: 'full' | 'compact' }) {
   )
 }
 
-function NaturePhoenix() {
+function NexaProcDashboard() {
+  const AMBER = '#f59e0b'; const ORANGE = '#ea580c'; const GREEN = '#16a34a'
+  const flowStages = [
+    {label:'REACTOR', val:'97.4°C', color:ORANGE},
+    {label:'MIXER', val:'850 RPM', color:AMBER},
+    {label:'SEPARATOR', val:'2.1 bar', color:GREEN},
+    {label:'OUTPUT', val:'OK', color:'#22c55e'},
+  ]
+  const metrics = [
+    {label:'Production Rate', val:'847', unit:'units/hr', color:AMBER},
+    {label:'OEE Score', val:'94.2', unit:'%', color:GREEN},
+    {label:'Active Alarms', val:'2', unit:'low priority', color:ORANGE},
+    {label:'Energy Usage', val:'18.4', unit:'kWh/unit', color:'#fbbf24'},
+  ]
+  const trendY = [95,90,88,92,85,87,80,83,75,78,72,76,70]
   return (
-    <svg viewBox="-150 -110 300 300" width="100%" height="100%" style={{ overflow: 'visible', maxWidth: 520 }}>
-      <defs>
-        <radialGradient id="natureAura" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.4" />
-          <stop offset="50%" stopColor="#ea580c" stopOpacity="0.15" />
-          <stop offset="100%" stopColor="#16a34a" stopOpacity="0" />
-        </radialGradient>
-        <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
-        </radialGradient>
-        <filter id="fireGlow" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="6" result="blur" />
-          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-        <filter id="softFire" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-        <linearGradient id="wLGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#16a34a" stopOpacity="0.7" />
-          <stop offset="50%" stopColor="#f59e0b" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.8" />
-        </linearGradient>
-        <linearGradient id="wRGrad" x1="100%" y1="100%" x2="0%" y2="0%">
-          <stop offset="0%" stopColor="#16a34a" stopOpacity="0.7" />
-          <stop offset="50%" stopColor="#ea580c" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.8" />
-        </linearGradient>
-        <linearGradient id="bodyFire" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#fbbf24" />
-          <stop offset="40%" stopColor="#f59e0b" />
-          <stop offset="100%" stopColor="#ea580c" />
-        </linearGradient>
-        <linearGradient id="tailFire" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#f59e0b" />
-          <stop offset="60%" stopColor="#ea580c" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#dc2626" stopOpacity="0.1" />
-        </linearGradient>
-      </defs>
+    <div style={{position:'relative',width:'100%',maxWidth:520}}>
+      <div style={{position:'absolute',inset:0,borderRadius:20,background:'radial-gradient(ellipse at 55% 40%, rgba(245,158,11,0.22) 0%, transparent 65%)',filter:'blur(30px)',pointerEvents:'none'}}/>
+      <svg viewBox="0 0 520 400" style={{width:'100%',display:'block',filter:'drop-shadow(0 0 40px rgba(245,158,11,0.25))'}}>
+        {/* Panel */}
+        <rect x="0" y="0" width="520" height="400" rx="18" fill="rgba(4,9,3,0.96)" stroke="rgba(245,158,11,0.45)" strokeWidth="1.5"/>
+        {/* Header */}
+        <rect x="0" y="0" width="520" height="46" rx="18" fill="rgba(245,158,11,0.12)"/>
+        <rect x="0" y="30" width="520" height="16" fill="rgba(245,158,11,0.12)"/>
+        <circle cx="20" cy="23" r="5" fill="#ef4444" opacity="0.85"/>
+        <circle cx="36" cy="23" r="5" fill="#f59e0b" opacity="0.85"/>
+        <circle cx="52" cy="23" r="5" fill="#22c55e" opacity="0.85"/>
+        <text x="74" y="23" fontFamily="monospace" fontSize="12" fill="rgba(255,255,255,0.75)" dominantBaseline="middle">NexaProc · Process Monitor · Plant A</text>
+        <circle cx="452" cy="23" r="4" fill="#22c55e"/>
+        <text x="462" y="23" fontFamily="monospace" fontSize="11" fill="#22c55e" dominantBaseline="middle">LINE 3</text>
 
-      {/* Warm sun aura */}
-      <ellipse cx="0" cy="20" rx="130" ry="100" fill="url(#natureAura)" />
-      <ellipse cx="0" cy="-15" rx="55" ry="45" fill="url(#sunGlow)" opacity="0.4" />
+        {/* Process flow pipeline */}
+        <text x="16" y="68" fontFamily="monospace" fontSize="10" fill="rgba(255,255,255,0.3)" letterSpacing="2">PROCESS FLOW</text>
+        {flowStages.map((s, i) => {
+          const x = 16 + i * 126
+          return (
+            <g key={i}>
+              <rect x={x} y="78" width="110" height="64" rx="10" fill="rgba(255,255,255,0.03)" stroke={s.color} strokeWidth="1.2" strokeOpacity="0.55"/>
+              <rect x={x} y="78" width="110" height="24" rx="10" fill={`${s.color}18`}/>
+              <rect x={x} y="90" width="110" height="12" fill={`${s.color}18`}/>
+              <text x={x+55} y="90" fontFamily="monospace" fontSize="9" fontWeight="bold" fill={s.color} textAnchor="middle" dominantBaseline="middle" letterSpacing="1">{s.label}</text>
+              <text x={x+55} y="118" fontFamily="monospace" fontSize="17" fontWeight="900" fill="white" textAnchor="middle" dominantBaseline="middle">{s.val}</text>
+              {/* Connector arrow */}
+              {i < 3 && <>
+                <line x1={x+110} y1="110" x2={x+120} y2="110" stroke={s.color} strokeWidth="1.5" strokeOpacity="0.5"/>
+                <polygon points={`${x+122},106 ${x+128},110 ${x+122},114`} fill={s.color} fillOpacity="0.5"/>
+              </>}
+            </g>
+          )
+        })}
 
-      {/* Leaf-shaped decorations */}
-      <path d="M-120,40 Q-100,10 -80,30 Q-100,50 -120,40 Z" fill="#16a34a" opacity="0.4" filter="url(#softFire)" />
-      <path d="M120,40 Q100,10 80,30 Q100,50 120,40 Z" fill="#16a34a" opacity="0.4" filter="url(#softFire)" />
-      <path d="M-130,-10 Q-115,-30 -95,-10 Q-115,5 -130,-10 Z" fill="#22c55e" opacity="0.3" />
-      <path d="M130,-10 Q115,-30 95,-10 Q115,5 130,-10 Z" fill="#22c55e" opacity="0.3" />
+        {/* Metrics row */}
+        <text x="16" y="162" fontFamily="monospace" fontSize="10" fill="rgba(255,255,255,0.3)" letterSpacing="2">LIVE METRICS</text>
+        {metrics.map((m, i) => {
+          const x = 12 + i * 124
+          return (
+            <g key={i}>
+              <rect x={x} y="172" width="116" height="60" rx="8" fill="rgba(255,255,255,0.025)" stroke={`${m.color}40`} strokeWidth="1"/>
+              <text x={x+10} y="190" fontFamily="monospace" fontSize="9" fill="rgba(255,255,255,0.35)" dominantBaseline="middle">{m.label}</text>
+              <text x={x+10} y="212" fontFamily="monospace" fontSize="20" fontWeight="900" fill={m.color} dominantBaseline="middle">{m.val}</text>
+              <text x={x+10} y="226" fontFamily="monospace" fontSize="9" fill="rgba(255,255,255,0.3)" dominantBaseline="middle">{m.unit}</text>
+            </g>
+          )
+        })}
 
-      {/* Tail feathers — fire trailing down */}
-      <path d="M-10,45 Q-35,100 -22,155 Q-12,168 0,158 Q12,168 22,155 Q35,100 10,45 Z" fill="url(#tailFire)" filter="url(#softFire)" />
-      <path d="M-18,52 Q-55,110 -42,162 Q-30,172 -18,155 Q-10,130 -5,100 L-12,50 Z" fill="#ea580c" opacity="0.45" filter="url(#softFire)" />
-      <path d="M18,52 Q55,110 42,162 Q30,172 18,155 Q10,130 5,100 L12,50 Z" fill="#ea580c" opacity="0.45" filter="url(#softFire)" />
-      {/* tail streaks */}
-      {[-5, 0, 5].map(x => (
-        <line key={x} x1={x} y1="55" x2={x * 2} y2="150" stroke="#fbbf24" strokeWidth="1" opacity="0.4" />
-      ))}
+        {/* Divider */}
+        <line x1="12" y1="244" x2="508" y2="244" stroke="rgba(245,158,11,0.18)" strokeWidth="1"/>
 
-      {/* Left wings — organic flame + leaf shapes */}
-      {/* Upper left wing */}
-      <path d="M-20,-25 Q-60,-50 -105,-90 Q-85,-50 -48,-18 Q-30,-8 -18,-2 Z" fill="url(#wLGrad)" filter="url(#fireGlow)" opacity="0.95" />
-      {/* Mid left wing */}
-      <path d="M-22,-8 Q-80,-12 -128,-2 Q-95,8 -35,5 Z" fill="#f59e0b" opacity="0.65" filter="url(#softFire)" />
-      {/* Lower left wing */}
-      <path d="M-20,15 Q-70,25 -115,55 Q-82,22 -38,10 Z" fill="#ea580c" opacity="0.55" filter="url(#softFire)" />
-      {/* leaf vein on wing */}
-      <path d="M-22,-15 Q-65,-35 -100,-60" fill="none" stroke="#fbbf24" strokeWidth="1.5" opacity="0.5" />
-      <path d="M-22,-15 Q-55,-10 -90,0" fill="none" stroke="#fde68a" strokeWidth="1" opacity="0.4" />
-      <path d="M-22,-15 Q-55,10 -85,30" fill="none" stroke="#fde68a" strokeWidth="1" opacity="0.3" />
+        {/* Production trend chart */}
+        <text x="16" y="258" fontFamily="monospace" fontSize="10" fill="rgba(255,255,255,0.3)" letterSpacing="2">PRODUCTION TREND  —  LAST 13 HOURS</text>
+        {/* Chart grid */}
+        {[0,1,2,3].map(i => (
+          <line key={i} x1="16" y1={280+i*20} x2="504" y2={280+i*20} stroke="rgba(255,255,255,0.05)" strokeWidth="1"/>
+        ))}
+        {/* Area */}
+        <polyline
+          points={`16,360 ${trendY.map((y,i)=>`${16+i*40},${y+290}`).join(' ')} 496,360`}
+          fill={`${AMBER}15`} stroke="none"/>
+        {/* Line */}
+        <polyline
+          points={trendY.map((y,i)=>`${16+i*40},${y+290}`).join(' ')}
+          fill="none" stroke={AMBER} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        {/* Dots */}
+        {trendY.map((y,i) => (
+          <circle key={i} cx={16+i*40} cy={y+290} r="3" fill={AMBER} opacity="0.85"/>
+        ))}
+        {/* Y axis labels */}
+        {['100','90','80','70'].map((l,i) => (
+          <text key={i} x="508" y={280+i*20} fontFamily="monospace" fontSize="8" fill="rgba(255,255,255,0.25)" dominantBaseline="middle">{l}%</text>
+        ))}
 
-      {/* Right wings */}
-      <path d="M20,-25 Q60,-50 105,-90 Q85,-50 48,-18 Q30,-8 18,-2 Z" fill="url(#wRGrad)" filter="url(#fireGlow)" opacity="0.95" />
-      <path d="M22,-8 Q80,-12 128,-2 Q95,8 35,5 Z" fill="#f59e0b" opacity="0.65" filter="url(#softFire)" />
-      <path d="M20,15 Q70,25 115,55 Q82,22 38,10 Z" fill="#ea580c" opacity="0.55" filter="url(#softFire)" />
-      <path d="M22,-15 Q65,-35 100,-60" fill="none" stroke="#fbbf24" strokeWidth="1.5" opacity="0.5" />
-      <path d="M22,-15 Q55,-10 90,0" fill="none" stroke="#fde68a" strokeWidth="1" opacity="0.4" />
-      <path d="M22,-15 Q55,10 85,30" fill="none" stroke="#fde68a" strokeWidth="1" opacity="0.3" />
-
-      {/* Body */}
-      <ellipse cx="0" cy="15" rx="16" ry="38" fill="url(#bodyFire)" filter="url(#fireGlow)" />
-
-      {/* Head */}
-      <circle cx="0" cy="-30" r="17" fill="#f59e0b" filter="url(#fireGlow)" />
-      <circle cx="0" cy="-30" r="11" fill="#fbbf24" />
-
-      {/* Crest — flame feathers */}
-      <path d="M-5,-45 Q-14,-68 -8,-92 Q-2,-80 0,-60 Z" fill="#ea580c" filter="url(#fireGlow)" />
-      <path d="M0,-47 Q0,-75 0,-98 Q3,-82 2,-62 Z" fill="#fbbf24" filter="url(#fireGlow)" />
-      <path d="M5,-45 Q14,-68 8,-92 Q2,-80 0,-60 Z" fill="#f59e0b" filter="url(#fireGlow)" />
-      {/* leaf crest */}
-      <path d="M-8,-50 Q-18,-58 -12,-65 Q-5,-60 -8,-50 Z" fill="#22c55e" opacity="0.7" />
-      <path d="M8,-50 Q18,-58 12,-65 Q5,-60 8,-50 Z" fill="#22c55e" opacity="0.7" />
-
-      {/* Eye */}
-      <circle cx="5" cy="-31" r="5.5" fill="#fde68a" />
-      <circle cx="6" cy="-31" r="3" fill="#92400e" />
-      <circle cx="7" cy="-32" r="1.2" fill="white" />
-
-      {/* Beak */}
-      <path d="M10,-26 L20,-22 L11,-18 Z" fill="#d97706" />
-
-      {/* Ember particles */}
-      {[[-108,32], [108,32], [-88,-70], [88,-70], [-60,-80], [60,-80], [-40,68], [40,68], [-120,8], [120,8], [-75,45], [75,45]].map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r={i % 3 === 0 ? 3.5 : i % 2 === 0 ? 2.5 : 1.8} fill={i % 3 === 0 ? '#fbbf24' : i % 2 === 0 ? '#ea580c' : '#22c55e'} filter="url(#softFire)" opacity={0.6 + (i % 4) * 0.1} />
-      ))}
-
-      {/* Organic tendrils */}
-      <path d="M-40,8 Q-65,0 -90,-18" fill="none" stroke="#16a34a" strokeWidth="1.5" opacity="0.4" strokeDasharray="4,3" />
-      <path d="M40,8 Q65,0 90,-18" fill="none" stroke="#16a34a" strokeWidth="1.5" opacity="0.4" strokeDasharray="4,3" />
-    </svg>
+        {/* Footer */}
+        <rect x="0" y="370" width="520" height="30" rx="0" fill="rgba(245,158,11,0.07)"/>
+        <rect x="0" y="382" width="520" height="18" rx="18" fill="rgba(245,158,11,0.07)"/>
+        <circle cx="18" cy="385" r="3" fill="#22c55e"/>
+        <text x="26" y="385" fontFamily="monospace" fontSize="9" fill="rgba(255,255,255,0.3)" dominantBaseline="middle">Plant A · Line 3 running · Batch #2847 · 94.2% OEE · 2 low alarms</text>
+      </svg>
+    </div>
   )
 }
+
 
 function WaveDivider({ flip = false, from = '#05100a', to = '#0a1a0d' }: { flip?: boolean; from?: string; to?: string }) {
   return (
@@ -333,12 +318,6 @@ export default function App() {
               <span style={{ fontSize: '50%', color: 'rgba(255,255,255,0.8)', fontWeight: 700, letterSpacing: 0 }}>Born from nature's power.</span>
             </h1>
             <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.6)', lineHeight: 1.75, marginBottom: 32, maxWidth: 460 }}>{heroSub}</p>
-
-            {/* Brand logo block */}
-            <div style={{ marginBottom: 32, padding: '20px 24px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.18)', borderRadius: 16, display: 'inline-block' }}>
-              <NexaProcLogo size="full" />
-            </div>
-
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               <a href="#contact" style={{ display: 'flex', alignItems: 'center', gap: 8, background: `linear-gradient(135deg, ${AMBER}, ${ORANGE})`, padding: '14px 28px', borderRadius: 12, fontWeight: 700, fontSize: 15, boxShadow: `0 0 30px rgba(245,158,11,0.4)`, color: 'white', textDecoration: 'none' }}>
                 Book Live Demo <ArrowRight size={18} />
@@ -363,7 +342,7 @@ export default function App() {
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
             <div style={{ position: 'absolute', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,158,11,0.25) 0%, transparent 70%)', filter: 'blur(40px)' }} />
             <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: 480 }}>
-              <NaturePhoenix />
+              <NexaProcDashboard />
             </div>
           </div>
         </div>
