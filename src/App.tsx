@@ -135,7 +135,7 @@ const HeroSection: FC = () => (
         </h1>
 
         <p style={{ fontSize: 18, color: C.muted, lineHeight: 1.78, marginBottom: 42, maxWidth: 560 }}>
-          Born from the embers of industrial complexity, NexaProc unifies every sensor, valve, and process node into one adaptive intelligence. Where others see downtime, it sees rebirth — real-time visibility, predictive control, and resilience forged in the roots of nature.
+          With roots that run deep in nature's resilience, NexaProc elevates industrial SCADA to an art of transformation. As embers of legacy ignite, each process is refined with the precision and rebirth of a phoenix rising.
         </p>
 
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 60 }}>
