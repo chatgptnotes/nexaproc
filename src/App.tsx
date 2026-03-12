@@ -6,14 +6,15 @@ import {
   Shirt, Siren, Smartphone, TrendingDown, User, Wheat,
 } from 'lucide-react';
 
-const VERSION = '1.4'; const BUILD_DATE = 'March 2026';
+const VERSION = '1.5'; const BUILD_DATE = 'March 2026';
 
 const C = {
-  bg: '#030e04', amber: '#fbbf24', orange: '#f97316',
+  bg: '#081f10', amber: '#fbbf24', orange: '#f97316',
   green: '#4ade80', forest: '#16a34a', gold: '#fde68a',
-  white: 'rgba(255,255,255,0.92)', muted: 'rgba(255,255,255,0.65)',
-  dim: 'rgba(255,255,255,0.28)',
-  card: 'rgba(4,16,6,0.82)', cardBorder: 'rgba(74,222,128,0.18)',
+  teal: '#0d9488', lime: '#a3e635',
+  white: 'rgba(255,255,255,0.95)', muted: 'rgba(255,255,255,0.72)',
+  dim: 'rgba(255,255,255,0.38)',
+  card: 'rgba(8,32,14,0.75)', cardBorder: 'rgba(74,222,128,0.28)',
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -29,8 +30,8 @@ const NavBar: FC = () => {
   return (
     <nav style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-      background: 'rgba(3,14,4,0.90)', backdropFilter: 'blur(24px)',
-      borderBottom: '1px solid rgba(74,222,128,0.14)',
+      background: 'rgba(8,26,12,0.92)', backdropFilter: 'blur(24px)',
+      borderBottom: '1px solid rgba(74,222,128,0.22)',
     }}>
       <div style={{
         maxWidth: 1280, margin: '0 auto', padding: '0 28px', height: 68,
@@ -79,29 +80,41 @@ const NavBar: FC = () => {
 // ─────────────────────────────────────────────────────────────────────────────
 const HeroSection: FC = () => (
   <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-    {/* Gemini 3 Pro generated hero image */}
+    {/* Gemini 3 Pro "Roots of Power" style hero — wide panoramic */}
     <div style={{
       position: 'absolute', inset: 0, zIndex: 0,
-      backgroundImage: `url(${img('hero_bg.jpg')})`,
-      backgroundSize: 'cover', backgroundPosition: 'center',
-      filter: 'brightness(0.62)',
+      backgroundImage: `url(${img('hero_wide.jpg')})`,
+      backgroundSize: 'cover', backgroundPosition: 'center top',
+      filter: 'brightness(0.78)',
     }} />
-    {/* Gradient overlay for text readability */}
+    {/* Subtle overlay — lighter than before so image shows through */}
     <div style={{
       position: 'absolute', inset: 0, zIndex: 1,
-      background: 'linear-gradient(135deg, rgba(3,14,4,0.88) 0%, rgba(3,14,4,0.55) 50%, rgba(3,14,4,0.72) 100%)',
+      background: 'linear-gradient(135deg, rgba(8,31,16,0.82) 0%, rgba(8,31,16,0.40) 55%, rgba(8,31,16,0.62) 100%)',
     }} />
-    {/* Left edge vignette */}
+    {/* Left text-safe vignette */}
     <div style={{
-      position: 'absolute', left: 0, top: 0, bottom: 0, width: '40%', zIndex: 2,
-      background: 'linear-gradient(to right, rgba(3,14,4,0.92), transparent)',
+      position: 'absolute', left: 0, top: 0, bottom: 0, width: '45%', zIndex: 2,
+      background: 'linear-gradient(to right, rgba(8,31,16,0.90), transparent)',
+    }} />
+
+    {/* Portrait "Roots of Power" image — right side accent */}
+    <div style={{
+      position: 'absolute', right: '4%', top: '50%', transform: 'translateY(-50%)',
+      width: 'clamp(220px,28vw,400px)', zIndex: 3,
+      backgroundImage: `url(${img('hero_roots.jpg')})`,
+      backgroundSize: 'cover', backgroundPosition: 'center',
+      aspectRatio: '9/16', borderRadius: 24,
+      opacity: 0.82,
+      boxShadow: '0 0 80px rgba(74,222,128,0.22), 0 0 160px rgba(251,191,36,0.1)',
+      border: '1px solid rgba(74,222,128,0.3)',
     }} />
 
     <div style={{
       position: 'relative', zIndex: 3, maxWidth: 1280, margin: '0 auto',
       padding: '120px 28px 80px', width: '100%',
     }}>
-      <div style={{ maxWidth: 680 }}>
+      <div style={{ maxWidth: 620 }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           background: 'rgba(251,191,36,0.12)', border: '1px solid rgba(251,191,36,0.38)',
@@ -184,13 +197,13 @@ const ProblemsSection: FC = () => (
     {/* Imagen 4 background */}
     <div style={{
       position: 'absolute', inset: 0, zIndex: 0,
-      backgroundImage: `url(${img('problems_bg.jpg')})`,
+      backgroundImage: `url(${img('divider_roots.jpg')})`,
       backgroundSize: 'cover', backgroundPosition: 'center',
-      filter: 'brightness(0.25)',
+      filter: 'brightness(0.55)',
     }} />
     <div style={{
       position: 'absolute', inset: 0, zIndex: 1,
-      background: 'rgba(3,10,4,0.72)',
+      background: 'rgba(8,26,12,0.62)',
     }} />
 
     <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto' }}>
@@ -240,11 +253,11 @@ const FeaturesSection: FC = () => (
   <section id="platform" style={{ position: 'relative', padding: '96px 28px', overflow: 'hidden' }}>
     <div style={{
       position: 'absolute', inset: 0, zIndex: 0,
-      backgroundImage: `url(${img('features_bg.jpg')})`,
+      backgroundImage: `url(${img('hero_roots.jpg')})`,
       backgroundSize: 'cover', backgroundPosition: 'center',
-      filter: 'brightness(0.18)',
+      filter: 'brightness(0.38)',
     }} />
-    <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'rgba(3,14,4,0.78)' }} />
+    <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'rgba(8,24,12,0.68)' }} />
 
     <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -305,11 +318,11 @@ const IndustriesSection: FC = () => (
   <section id="industries" style={{ position: 'relative', padding: '96px 28px', overflow: 'hidden' }}>
     <div style={{
       position: 'absolute', inset: 0, zIndex: 0,
-      backgroundImage: `url(${img('industries_bg.jpg')})`,
-      backgroundSize: 'cover', backgroundPosition: 'center',
-      filter: 'brightness(0.3)',
+      backgroundImage: `url(${img('divider_roots.jpg')})`,
+      backgroundSize: 'cover', backgroundPosition: 'center bottom',
+      filter: 'brightness(0.48)',
     }} />
-    <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'rgba(3,12,4,0.68)' }} />
+    <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'rgba(8,26,12,0.58)' }} />
 
     <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: 60 }}>
@@ -376,14 +389,14 @@ const DemoFormSection: FC = () => {
 
   return (
     <section id="contact" style={{ position: 'relative', padding: '100px 28px', overflow: 'hidden' }}>
-      {/* Imagen 4 Ultra generated background */}
+      {/* "Roots of Power" style background — lighter */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 0,
-        backgroundImage: `url(${img('cta_bg.jpg')})`,
-        backgroundSize: 'cover', backgroundPosition: 'center',
-        filter: 'brightness(0.28)',
+        backgroundImage: `url(${img('hero_wide.jpg')})`,
+        backgroundSize: 'cover', backgroundPosition: 'center bottom',
+        filter: 'brightness(0.55)',
       }} />
-      <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'rgba(3,10,4,0.65)' }} />
+      <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'rgba(8,24,12,0.55)' }} />
 
       <div style={{ position: 'relative', zIndex: 2, maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
         <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, color: C.green, textTransform: 'uppercase', display: 'block', marginBottom: 12 }}>Get Started Today</span>
@@ -455,7 +468,7 @@ const DemoFormSection: FC = () => {
 // ─────────────────────────────────────────────────────────────────────────────
 const Footer: FC = () => (
   <footer style={{
-    background: 'rgba(2,8,3,0.96)', borderTop: '1px solid rgba(74,222,128,0.1)',
+    background: 'rgba(6,20,10,0.98)', borderTop: '1px solid rgba(74,222,128,0.18)',
     padding: '40px 28px', textAlign: 'center',
   }}>
     <div style={{ maxWidth: 1280, margin: '0 auto' }}>
