@@ -10,3 +10,22 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
+
+/* ─── SCADA Animations ─────────────────────────────────────────────────────── */
+@keyframes alarm-flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(74,222,128,0.3); }
+  50% { box-shadow: 0 0 20px rgba(74,222,128,0.6); }
+}
+@keyframes flow {
+  0% { stroke-dashoffset: 20; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* ─── Custom scrollbar ─────────────────────────────────────────────────────── */
+.scrollbar-thin::-webkit-scrollbar { width: 6px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(74,222,128,0.2); border-radius: 3px; }
