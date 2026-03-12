@@ -132,6 +132,243 @@ function ProcessMockup() {
   )
 }
 
+// ── ARTISTIC BACKGROUND — Phoenix Rising from Industrial Roots ────────────────
+function ArtisticBackground() {
+  return (
+    <div style={{ position:'fixed', inset:0, zIndex:0, pointerEvents:'none', overflow:'hidden' }}>
+      <svg width="100%" height="100%" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          {/* Root glow gradient */}
+          <radialGradient id="rootGlow" cx="50%" cy="85%" r="45%">
+            <stop offset="0%" stopColor="#16a34a" stopOpacity="0.22"/>
+            <stop offset="60%" stopColor="#4ade80" stopOpacity="0.06"/>
+            <stop offset="100%" stopColor="transparent" stopOpacity="0"/>
+          </radialGradient>
+          {/* Phoenix body glow */}
+          <radialGradient id="phoenixGlow" cx="50%" cy="55%" r="35%">
+            <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.14"/>
+            <stop offset="50%" stopColor="#f97316" stopOpacity="0.07"/>
+            <stop offset="100%" stopColor="transparent" stopOpacity="0"/>
+          </radialGradient>
+          {/* Wing left gradient */}
+          <linearGradient id="wingL" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#4ade80" stopOpacity="0.18"/>
+            <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.06"/>
+          </linearGradient>
+          {/* Wing right gradient */}
+          <linearGradient id="wingR" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#4ade80" stopOpacity="0.18"/>
+            <stop offset="100%" stopColor="#f97316" stopOpacity="0.06"/>
+          </linearGradient>
+          {/* Vertical trunk gradient */}
+          <linearGradient id="trunkGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stopColor="#16a34a" stopOpacity="0.35"/>
+            <stop offset="50%" stopColor="#4ade80" stopOpacity="0.18"/>
+            <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.12"/>
+          </linearGradient>
+          {/* Circuit line gradient */}
+          <linearGradient id="circuitL" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#4ade80" stopOpacity="0"/>
+            <stop offset="40%" stopColor="#4ade80" stopOpacity="0.25"/>
+            <stop offset="100%" stopColor="#4ade80" stopOpacity="0"/>
+          </linearGradient>
+          <linearGradient id="circuitR" x1="100%" y1="0%" x2="0%" y2="0%">
+            <stop offset="0%" stopColor="#fbbf24" stopOpacity="0"/>
+            <stop offset="40%" stopColor="#fbbf24" stopOpacity="0.2"/>
+            <stop offset="100%" stopColor="#fbbf24" stopOpacity="0"/>
+          </linearGradient>
+          {/* Glow filter */}
+          <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="rootBlur" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="1.5"/>
+          </filter>
+        </defs>
+
+        {/* ── Background glow pools ── */}
+        <ellipse cx="720" cy="780" rx="520" ry="200" fill="url(#rootGlow)"/>
+        <ellipse cx="720" cy="490" rx="380" ry="280" fill="url(#phoenixGlow)"/>
+
+        {/* ── Ornamental outer border ── */}
+        <rect x="18" y="18" width="1404" height="864" rx="4" fill="none" stroke="rgba(74,222,128,0.06)" strokeWidth="1"/>
+        <rect x="28" y="28" width="1384" height="844" rx="2" fill="none" stroke="rgba(251,191,36,0.04)" strokeWidth="0.5"/>
+
+        {/* ── Corner ornaments ── */}
+        {[[28,28],[1412,28],[28,872],[1412,872]].map(([cx,cy],i)=>(
+          <g key={i} transform={`translate(${cx},${cy}) rotate(${[0,90,270,180][i]})`}>
+            <path d="M0,0 L32,0 M0,0 L0,32" stroke="rgba(74,222,128,0.2)" strokeWidth="1.5" fill="none"/>
+            <circle cx="0" cy="0" r="3" fill="rgba(74,222,128,0.25)"/>
+          </g>
+        ))}
+
+        {/* ── Deep root system (bottom) ── */}
+        {/* Main tap root */}
+        <path d="M720,900 C720,860 718,840 720,800 C722,760 720,740 720,700" stroke="url(#trunkGrad)" strokeWidth="3" fill="none" opacity="0.9"/>
+        {/* Root left 1 */}
+        <path d="M720,820 C700,820 670,830 640,850 C620,862 590,870 560,880" stroke="rgba(22,163,74,0.28)" strokeWidth="1.8" fill="none"/>
+        {/* Root left 2 */}
+        <path d="M718,840 C690,838 660,845 630,860 C600,872 570,882 540,895" stroke="rgba(22,163,74,0.18)" strokeWidth="1.2" fill="none"/>
+        {/* Root left 3 — wide spread */}
+        <path d="M716,860 C680,855 640,860 600,870 C560,878 510,888 460,900" stroke="rgba(74,222,128,0.15)" strokeWidth="1" fill="none"/>
+        {/* Root right 1 */}
+        <path d="M720,820 C740,820 770,830 800,850 C820,862 850,870 880,880" stroke="rgba(22,163,74,0.28)" strokeWidth="1.8" fill="none"/>
+        {/* Root right 2 */}
+        <path d="M722,840 C750,838 780,845 810,860 C840,872 870,882 900,895" stroke="rgba(22,163,74,0.18)" strokeWidth="1.2" fill="none"/>
+        {/* Root right 3 — wide spread */}
+        <path d="M724,860 C760,855 800,860 840,870 C880,878 930,888 980,900" stroke="rgba(74,222,128,0.15)" strokeWidth="1" fill="none"/>
+
+        {/* ── Trunk rising ── */}
+        <path d="M720,700 C718,660 716,620 718,580 C720,540 720,500 720,460" stroke="url(#trunkGrad)" strokeWidth="2.5" fill="none"/>
+        {/* Trunk branches left */}
+        <path d="M718,640 C700,630 674,618 648,600 C624,584 600,565 576,548" stroke="rgba(74,222,128,0.2)" strokeWidth="1.4" fill="none"/>
+        <path d="M576,548 C560,540 540,530 518,518" stroke="rgba(74,222,128,0.12)" strokeWidth="1" fill="none"/>
+        {/* Trunk branches right */}
+        <path d="M722,620 C742,608 768,594 796,578 C820,564 848,548 876,532" stroke="rgba(74,222,128,0.2)" strokeWidth="1.4" fill="none"/>
+        <path d="M876,532 C896,522 918,510 942,498" stroke="rgba(74,222,128,0.12)" strokeWidth="1" fill="none"/>
+
+        {/* ── Phoenix wings — silhouette ── */}
+        {/* LEFT WING */}
+        <path d="M720,480 C680,450 620,420 560,400 C500,380 430,365 370,360 C330,357 290,360 270,372 C290,365 330,370 370,378 C430,390 500,408 556,432 C612,456 666,486 700,510 Z" fill="url(#wingL)" filter="url(#softGlow)"/>
+        <path d="M710,490 C670,468 610,448 548,435 C490,424 420,418 370,425 C350,428 330,435 318,445 C340,438 362,434 390,432 C448,428 518,436 576,452 C632,466 680,488 710,508 Z" fill="rgba(74,222,128,0.08)"/>
+        {/* LEFT wing feather tips */}
+        <path d="M560,400 C540,388 510,372 480,360" stroke="rgba(74,222,128,0.18)" strokeWidth="1.2" fill="none"/>
+        <path d="M500,382 C478,368 448,352 416,340" stroke="rgba(74,222,128,0.14)" strokeWidth="1" fill="none"/>
+        <path d="M430,366 C408,352 376,336 344,324" stroke="rgba(74,222,128,0.1)" strokeWidth="0.8" fill="none"/>
+
+        {/* RIGHT WING */}
+        <path d="M720,480 C760,450 820,420 880,400 C940,380 1010,365 1070,360 C1110,357 1150,360 1170,372 C1150,365 1110,370 1070,378 C1010,390 940,408 884,432 C828,456 774,486 740,510 Z" fill="url(#wingR)" filter="url(#softGlow)"/>
+        <path d="M730,490 C770,468 830,448 892,435 C950,424 1020,418 1070,425 C1090,428 1110,435 1122,445 C1100,438 1078,434 1050,432 C992,428 922,436 864,452 C808,466 760,488 730,508 Z" fill="rgba(74,222,128,0.08)"/>
+        {/* RIGHT wing feather tips */}
+        <path d="M880,400 C900,388 930,372 960,360" stroke="rgba(74,222,128,0.18)" strokeWidth="1.2" fill="none"/>
+        <path d="M940,382 C962,368 992,352 1024,340" stroke="rgba(74,222,128,0.14)" strokeWidth="1" fill="none"/>
+        <path d="M1010,366 C1032,352 1064,336 1096,324" stroke="rgba(74,222,128,0.1)" strokeWidth="0.8" fill="none"/>
+
+        {/* ── Phoenix body flame core ── */}
+        <path d="M720,510 C712,490 706,468 710,448 C714,428 720,418 720,418 C720,418 726,428 730,448 C734,468 728,490 720,510 Z" fill="rgba(251,191,36,0.12)" filter="url(#softGlow)"/>
+        <path d="M720,510 C715,492 712,474 714,458 C716,442 720,432 720,432 C720,432 724,442 726,458 C728,474 725,492 720,510 Z" fill="rgba(249,115,22,0.1)"/>
+
+        {/* ── Circuit / industrial lines horizontal ── */}
+        {/* Left side circuit traces */}
+        <line x1="0" y1="240" x2="320" y2="240" stroke="url(#circuitL)" strokeWidth="0.8"/>
+        <line x1="0" y1="380" x2="280" y2="380" stroke="url(#circuitL)" strokeWidth="0.8"/>
+        <line x1="0" y1="520" x2="300" y2="520" stroke="url(#circuitL)" strokeWidth="0.8"/>
+        <line x1="0" y1="660" x2="260" y2="660" stroke="url(#circuitL)" strokeWidth="0.8"/>
+        {/* Right side circuit traces */}
+        <line x1="1440" y1="240" x2="1120" y2="240" stroke="url(#circuitR)" strokeWidth="0.8"/>
+        <line x1="1440" y1="380" x2="1160" y2="380" stroke="url(#circuitR)" strokeWidth="0.8"/>
+        <line x1="1440" y1="520" x2="1140" y2="520" stroke="url(#circuitR)" strokeWidth="0.8"/>
+        <line x1="1440" y1="660" x2="1180" y2="660" stroke="url(#circuitR)" strokeWidth="0.8"/>
+
+        {/* Circuit nodes — small squares */}
+        {[[318,240],[278,380],[298,520],[258,660],[1122,240],[1162,380],[1142,520],[1182,660]].map(([x,y],i)=>(
+          <rect key={i} x={x-3} y={y-3} width="6" height="6" fill="none" stroke={i<4?"rgba(74,222,128,0.3)":"rgba(251,191,36,0.25)"} strokeWidth="1"/>
+        ))}
+
+        {/* ── Vertical circuit branches from horizontal ── */}
+        <path d="M200,240 L200,220 L180,220" stroke="rgba(74,222,128,0.15)" strokeWidth="0.8" fill="none"/>
+        <path d="M160,380 L160,360 L140,360 L140,340" stroke="rgba(74,222,128,0.15)" strokeWidth="0.8" fill="none"/>
+        <path d="M1240,240 L1240,220 L1260,220" stroke="rgba(251,191,36,0.15)" strokeWidth="0.8" fill="none"/>
+        <path d="M1280,380 L1280,360 L1300,360 L1300,340" stroke="rgba(251,191,36,0.15)" strokeWidth="0.8" fill="none"/>
+
+        {/* ── Industrial process flow symbols (left) ── */}
+        {/* Tank silhouette left */}
+        <g opacity="0.12">
+          <rect x="60" y="190" width="36" height="44" rx="4" fill="none" stroke="#4ade80" strokeWidth="1.2"/>
+          <ellipse cx="78" cy="190" rx="18" ry="6" fill="none" stroke="#4ade80" strokeWidth="1.2"/>
+          <line x1="78" y1="234" x2="78" y2="244" stroke="#4ade80" strokeWidth="1.2"/>
+        </g>
+        {/* Wind turbine silhouette left */}
+        <g opacity="0.1">
+          <line x1="148" y1="300" x2="148" y2="348" stroke="#4ade80" strokeWidth="1.5"/>
+          <line x1="148" y1="304" x2="134" y2="286" stroke="#4ade80" strokeWidth="1.2"/>
+          <line x1="148" y1="304" x2="162" y2="286" stroke="#4ade80" strokeWidth="1.2"/>
+          <line x1="148" y1="304" x2="148" y2="284" stroke="#4ade80" strokeWidth="1.2"/>
+          <circle cx="148" cy="304" r="3" fill="#4ade80"/>
+        </g>
+        {/* Pipe connector left */}
+        <g opacity="0.1">
+          <path d="M40,510 L80,510 L80,490 L120,490" stroke="#4ade80" strokeWidth="1.2" fill="none"/>
+          <circle cx="40" cy="510" r="3" fill="#4ade80"/>
+          <circle cx="120" cy="490" r="3" fill="#4ade80"/>
+        </g>
+
+        {/* ── Industrial process flow symbols (right) ── */}
+        {/* Tank silhouette right */}
+        <g opacity="0.12">
+          <rect x="1344" y="190" width="36" height="44" rx="4" fill="none" stroke="#fbbf24" strokeWidth="1.2"/>
+          <ellipse cx="1362" cy="190" rx="18" ry="6" fill="none" stroke="#fbbf24" strokeWidth="1.2"/>
+          <line x1="1362" y1="234" x2="1362" y2="244" stroke="#fbbf24" strokeWidth="1.2"/>
+        </g>
+        {/* Gear right */}
+        <g opacity="0.1">
+          <circle cx="1292" cy="310" r="18" fill="none" stroke="#fbbf24" strokeWidth="1.2"/>
+          <circle cx="1292" cy="310" r="8" fill="none" stroke="#fbbf24" strokeWidth="1"/>
+          {[0,45,90,135,180,225,270,315].map((a,i)=>(
+            <line key={i}
+              x1={1292+18*Math.cos(a*Math.PI/180)} y1={310+18*Math.sin(a*Math.PI/180)}
+              x2={1292+24*Math.cos(a*Math.PI/180)} y2={310+24*Math.sin(a*Math.PI/180)}
+              stroke="#fbbf24" strokeWidth="2.5"/>
+          ))}
+        </g>
+        {/* Pipe connector right */}
+        <g opacity="0.1">
+          <path d="M1400,510 L1360,510 L1360,490 L1320,490" stroke="#fbbf24" strokeWidth="1.2" fill="none"/>
+          <circle cx="1400" cy="510" r="3" fill="#fbbf24"/>
+          <circle cx="1320" cy="490" r="3" fill="#fbbf24"/>
+        </g>
+
+        {/* ── Subtle hex grid pattern (top area) ── */}
+        <g opacity="0.035">
+          {[...Array(8)].map((_,row)=>
+            [...Array(6)].map((_,col)=>{
+              const cx = 140+col*200+(row%2)*100
+              const cy = 80+row*90
+              const r = 32
+              const pts = [...Array(6)].map((_,i)=>{
+                const a = (i*60-30)*Math.PI/180
+                return `${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`
+              }).join(' ')
+              return <polygon key={`${row}-${col}`} points={pts} fill="none" stroke="#4ade80" strokeWidth="0.8"/>
+            })
+          )}
+        </g>
+
+        {/* ── Rune circle around phoenix core ── */}
+        <circle cx="720" cy="470" r="130" fill="none" stroke="rgba(74,222,128,0.06)" strokeWidth="1" strokeDasharray="4 8"/>
+        <circle cx="720" cy="470" r="150" fill="none" stroke="rgba(251,191,36,0.04)" strokeWidth="0.8" strokeDasharray="2 12"/>
+        <circle cx="720" cy="470" r="108" fill="none" stroke="rgba(74,222,128,0.08)" strokeWidth="0.6"/>
+
+        {/* Rune tick marks */}
+        {[...Array(24)].map((_,i)=>{
+          const a = (i*15)*Math.PI/180
+          const r1 = i%6===0?98:i%3===0?101:103
+          const r2 = 108
+          return <line key={i}
+            x1={720+r1*Math.cos(a)} y1={470+r1*Math.sin(a)}
+            x2={720+r2*Math.cos(a)} y2={470+r2*Math.sin(a)}
+            stroke="rgba(74,222,128,0.15)" strokeWidth={i%6===0?1.2:0.6}/>
+        })}
+
+        {/* ── Flowing energy lines from core to edges ── */}
+        <path d="M720,420 C710,380 700,320 680,280 C660,240 630,200 600,180" stroke="rgba(251,191,36,0.08)" strokeWidth="1.2" fill="none" strokeDasharray="6 10"/>
+        <path d="M720,420 C730,380 740,320 760,280 C780,240 810,200 840,180" stroke="rgba(74,222,128,0.08)" strokeWidth="1.2" fill="none" strokeDasharray="6 10"/>
+        <path d="M720,480 C680,500 620,520 560,530 C500,540 440,545 380,548" stroke="rgba(74,222,128,0.06)" strokeWidth="1" fill="none" strokeDasharray="4 8"/>
+        <path d="M720,480 C760,500 820,520 880,530 C940,540 1000,545 1060,548" stroke="rgba(251,191,36,0.06)" strokeWidth="1" fill="none" strokeDasharray="4 8"/>
+
+        {/* ── Scan line overlay ── */}
+        {[...Array(18)].map((_,i)=>(
+          <line key={i} x1="0" y1={i*52} x2="1440" y2={i*52} stroke="rgba(74,222,128,0.012)" strokeWidth="1"/>
+        ))}
+
+        {/* ── Bottom root glow pulse ── */}
+        <ellipse cx="720" cy="880" rx="300" ry="60" fill="rgba(22,163,74,0.1)" filter="url(#rootBlur)"/>
+      </svg>
+    </div>
+  )
+}
+
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [heroTag, setHeroTag] = useState("Nature's Fire Forging Industrial Excellence")
@@ -180,10 +417,11 @@ export default function App() {
   const integrations = ['Siemens S7','Allen Bradley','Schneider','OPC-UA','Modbus TCP/RTU','MQTT','Profibus','IEC 61131','REST API','SAP MES']
 
   return (
-    <div style={{ fontFamily:"'Inter',system-ui,sans-serif", background:N.bg, color:N.white, minHeight:'100vh' }}>
+    <div style={{ fontFamily:"'Inter',system-ui,sans-serif", background:N.bg, color:N.white, minHeight:'100vh', position:'relative' }}>
+      <ArtisticBackground/>
 
       {/* ── NAV ── */}
-      <nav style={{ position:'fixed', top:0, width:'100%', zIndex:50, background:'rgba(3,14,4,0.92)', backdropFilter:'blur(24px)', borderBottom:`1px solid rgba(251,191,36,0.18)` }}>
+      <nav style={{ position:'fixed', top:0, width:'100%', zIndex:50, isolation:'isolate', background:'rgba(3,14,4,0.92)', backdropFilter:'blur(24px)', borderBottom:`1px solid rgba(251,191,36,0.18)` }}>
         <div style={{ maxWidth:1280, margin:'0 auto', padding:'0 24px', height:64, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
             <div style={{ width:38, height:38, borderRadius:11, background:`linear-gradient(135deg,${N.amber},${N.orange})`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 24px rgba(251,191,36,0.5)` }}>
@@ -207,7 +445,7 @@ export default function App() {
       </nav>
 
       {/* ── HERO ── */}
-      <section style={{ minHeight:'100vh', position:'relative', display:'flex', alignItems:'center', paddingTop:80, overflow:'hidden', background:`linear-gradient(170deg,#030e04 0%,#061508 55%,#020a03 100%)` }}>
+      <section style={{ minHeight:'100vh', position:'relative', zIndex:1, display:'flex', alignItems:'center', paddingTop:80, overflow:'hidden', background:`linear-gradient(170deg,rgba(3,14,4,0.82) 0%,rgba(6,21,8,0.78) 55%,rgba(2,10,3,0.88) 100%)` }}>
         {/* Ember + nature glow orbs */}
         <div style={{ position:'absolute', top:'8%', right:'2%', width:580, height:580, borderRadius:'50%', background:`radial-gradient(circle,rgba(251,191,36,0.18) 0%,rgba(249,115,22,0.08) 50%,transparent 70%)`, filter:'blur(70px)', pointerEvents:'none' }}/>
         <div style={{ position:'absolute', bottom:'8%', left:'1%', width:460, height:460, borderRadius:'50%', background:`radial-gradient(circle,rgba(74,222,128,0.14) 0%,rgba(22,163,74,0.06) 50%,transparent 70%)`, filter:'blur(60px)', pointerEvents:'none' }}/>
@@ -261,7 +499,7 @@ export default function App() {
       </section>
 
       {/* ── CLIENT BAR ── */}
-      <section style={{ background:N.bg2c, padding:'26px 24px', borderBottom:`1px solid rgba(251,191,36,0.08)` }}>
+      <section style={{ position:'relative', zIndex:1, background:'rgba(4,17,5,0.88)', padding:'26px 24px', borderBottom:`1px solid rgba(251,191,36,0.08)` }}>
         <div style={{ maxWidth:1280, margin:'0 auto', textAlign:'center' }}>
           <p style={{ fontSize:11, letterSpacing:3, color:N.dimmer, marginBottom:16 }}>TRUSTED BY INDIA'S LEADING MANUFACTURERS</p>
           <div style={{ display:'flex', flexWrap:'wrap', justifyContent:'center', gap:'12px 40px' }}>
@@ -275,7 +513,7 @@ export default function App() {
       <WaveDivider from={N.bg2c} to={N.bg}/>
 
       {/* ── PROBLEM ── */}
-      <section style={{ background:N.bg, padding:'88px 24px' }}>
+      <section style={{ position:'relative', zIndex:1, background:'rgba(3,14,4,0.84)', padding:'88px 24px' }}>
         <div style={{ maxWidth:1280, margin:'0 auto' }}>
           <div style={{ textAlign:'center', marginBottom:56 }}>
             <div style={{ display:'inline-block', background:'rgba(251,191,36,0.08)', border:`1px solid rgba(251,191,36,0.28)`, borderRadius:100, padding:'5px 18px', fontSize:11, color:N.amber, fontWeight:700, letterSpacing:3, marginBottom:16 }}>THE PROBLEM</div>
@@ -301,7 +539,7 @@ export default function App() {
       <WaveDivider from={N.bg} to={N.bg3}/>
 
       {/* ── FEATURES ── */}
-      <section id="features" style={{ background:N.bg3, padding:'88px 24px' }}>
+      <section id="features" style={{ position:'relative', zIndex:1, background:'rgba(2,12,3,0.86)', padding:'88px 24px' }}>
         <div style={{ maxWidth:1280, margin:'0 auto' }}>
           <div style={{ textAlign:'center', marginBottom:56 }}>
             <div style={{ display:'inline-block', background:'rgba(74,222,128,0.08)', border:`1px solid rgba(74,222,128,0.25)`, borderRadius:100, padding:'5px 18px', fontSize:11, color:N.green, fontWeight:700, letterSpacing:3, marginBottom:16 }}>PLATFORM FEATURES</div>
@@ -327,7 +565,7 @@ export default function App() {
       <WaveDivider from={N.bg3} to={N.bg}/>
 
       {/* ── ROI ── */}
-      <section style={{ background:N.bg, padding:'88px 24px' }}>
+      <section style={{ position:'relative', zIndex:1, background:'rgba(3,14,4,0.84)', padding:'88px 24px' }}>
         <div style={{ maxWidth:1280, margin:'0 auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:72, alignItems:'center' }}>
           <div>
             <div style={{ display:'inline-block', background:'rgba(251,191,36,0.08)', border:`1px solid rgba(251,191,36,0.28)`, borderRadius:100, padding:'5px 18px', fontSize:11, color:N.amber, fontWeight:700, letterSpacing:3, marginBottom:16 }}>PROVEN ROI</div>
@@ -351,7 +589,7 @@ export default function App() {
       <WaveDivider from={N.bg} to={N.bg3}/>
 
       {/* ── PROCESS ── */}
-      <section id="process" style={{ background:N.bg3, padding:'88px 24px' }}>
+      <section id="process" style={{ position:'relative', zIndex:1, background:'rgba(2,12,3,0.86)', padding:'88px 24px' }}>
         <div style={{ maxWidth:1100, margin:'0 auto' }}>
           <div style={{ textAlign:'center', marginBottom:64 }}>
             <div style={{ display:'inline-block', background:'rgba(74,222,128,0.08)', border:`1px solid rgba(74,222,128,0.25)`, borderRadius:100, padding:'5px 18px', fontSize:11, color:N.lime, fontWeight:700, letterSpacing:3, marginBottom:16 }}>HOW IT WORKS</div>
@@ -376,7 +614,7 @@ export default function App() {
       <WaveDivider from={N.bg3} to={N.bg}/>
 
       {/* ── INDUSTRIES ── */}
-      <section id="industries" style={{ background:N.bg, padding:'88px 24px' }}>
+      <section id="industries" style={{ position:'relative', zIndex:1, background:'rgba(3,14,4,0.84)', padding:'88px 24px' }}>
         <div style={{ maxWidth:1280, margin:'0 auto', textAlign:'center' }}>
           <h2 style={{ fontSize:'clamp(28px,4vw,46px)', fontWeight:900, marginBottom:12 }}>Industries We Serve</h2>
           <p style={{ color:N.muted, marginBottom:48, fontSize:16 }}>NexaProc adapts to your industry's unique process environment and compliance requirements.</p>
@@ -396,7 +634,7 @@ export default function App() {
       <WaveDivider from={N.bg} to={N.bg3}/>
 
       {/* ── INTEGRATIONS ── */}
-      <section id="integrations" style={{ background:N.bg3, padding:'88px 24px' }}>
+      <section id="integrations" style={{ position:'relative', zIndex:1, background:'rgba(2,12,3,0.86)', padding:'88px 24px' }}>
         <div style={{ maxWidth:900, margin:'0 auto', textAlign:'center' }}>
           <h2 style={{ fontSize:'clamp(26px,4vw,42px)', fontWeight:900, marginBottom:12 }}>Works with Your Existing Infrastructure</h2>
           <p style={{ color:N.muted, marginBottom:48, fontSize:16 }}>No rip-and-replace. NexaProc connects natively to every major PLC brand and industrial protocol.</p>
