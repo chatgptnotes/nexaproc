@@ -135,7 +135,7 @@ const HeroSection: FC = () => (
         </h1>
 
         <p style={{ fontSize: 18, color: C.muted, lineHeight: 1.78, marginBottom: 42, maxWidth: 560 }}>
-          Unify every sensor, valve, and actuator in your plant under one intelligent SCADA platform. Real-time visibility, predictive intelligence, and precise control — forged with the power of nature.
+          Born from the embers of industrial complexity, NexaProc unifies every sensor, valve, and process node into one adaptive intelligence. Where others see downtime, it sees rebirth — real-time visibility, predictive control, and resilience forged in the roots of nature.
         </p>
 
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 60 }}>
