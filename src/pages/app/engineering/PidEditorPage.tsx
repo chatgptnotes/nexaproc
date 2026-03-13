@@ -1,159 +1,469 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
-  MousePointer2, Move, Plus, Minus, Trash2, Save, Download, Upload,
-  Undo2, Redo2, ZoomIn, ZoomOut, Grid3x3, Layers,
-  Cylinder, CircleDot, Droplets, Heater, Gauge, Thermometer, Activity, Box, Container,
-} from 'lucide-react';
+  ReactFlow,
+  Background,
+  Controls,
+  MiniMap,
+  useNodesState,
+  useEdgesState,
+  addEdge,
+  BackgroundVariant,
+  Panel,
+} from '@xyflow/react';
+import type { Node, Edge, Connection, NodeTypes, EdgeTypes } from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+
+import { PidSymbolNode } from '@/components/pid/nodes/PidSymbolNode';
+import type { PidSymbolNodeData } from '@/components/pid/nodes/PidSymbolNode';
+import { PipeConnectionEdge } from '@/components/pid/nodes/PipeConnectionEdge';
+import { CATEGORIES } from '@/components/pid/PidSymbolPalette';
 import { Button } from '@/components/ui/Button';
+import { Save, Eye, EyeOff, Trash2 } from 'lucide-react';
 
-type Tool = 'select' | 'pan' | 'add_symbol' | 'add_pipe' | 'delete';
+// ─── Node & Edge types (outside component) ──────────────────────────────────
+const nodeTypes: NodeTypes = { pidSymbol: PidSymbolNode };
+const edgeTypes: EdgeTypes = { pipe: PipeConnectionEdge };
 
-interface SymbolCategory {
-  name: string;
-  items: { id: string; label: string; icon: React.ReactNode }[];
-}
+const ROTATIONS = [0, 90, 180, 270] as const;
 
-const symbolPalette: SymbolCategory[] = [
-  { name: 'Valves', items: [
-    { id: 'gate-valve', label: 'Gate Valve', icon: <CircleDot size={16} /> },
-    { id: 'globe-valve', label: 'Globe Valve', icon: <CircleDot size={16} /> },
-    { id: 'check-valve', label: 'Check Valve', icon: <CircleDot size={16} /> },
-    { id: 'control-valve', label: 'Control Valve', icon: <CircleDot size={16} /> },
-  ]},
-  { name: 'Vessels', items: [
-    { id: 'tank', label: 'Tank', icon: <Container size={16} /> },
-    { id: 'reactor', label: 'Reactor', icon: <Cylinder size={16} /> },
-    { id: 'column', label: 'Column', icon: <Cylinder size={16} /> },
-    { id: 'drum', label: 'Drum', icon: <Box size={16} /> },
-  ]},
-  { name: 'Instruments', items: [
-    { id: 'temp-transmitter', label: 'Temp Transmitter', icon: <Thermometer size={16} /> },
-    { id: 'press-transmitter', label: 'Press Transmitter', icon: <Gauge size={16} /> },
-    { id: 'flow-transmitter', label: 'Flow Transmitter', icon: <Activity size={16} /> },
-    { id: 'level-transmitter', label: 'Level Transmitter', icon: <Gauge size={16} /> },
-  ]},
-  { name: 'Pumps', items: [
-    { id: 'centrifugal-pump', label: 'Centrifugal Pump', icon: <Droplets size={16} /> },
-    { id: 'positive-disp', label: 'Positive Disp.', icon: <Droplets size={16} /> },
-    { id: 'vacuum-pump', label: 'Vacuum Pump', icon: <Droplets size={16} /> },
-  ]},
-  { name: 'Heat Exchangers', items: [
-    { id: 'shell-tube', label: 'Shell & Tube', icon: <Heater size={16} /> },
-    { id: 'plate-he', label: 'Plate HE', icon: <Heater size={16} /> },
-    { id: 'condenser', label: 'Condenser', icon: <Heater size={16} /> },
-  ]},
-];
+// ─── Symbol Palette ──────────────────────────────────────────────────────────
 
-const tools: { id: Tool; label: string; icon: React.ReactNode }[] = [
-  { id: 'select', label: 'Select', icon: <MousePointer2 size={16} /> },
-  { id: 'pan', label: 'Pan', icon: <Move size={16} /> },
-  { id: 'add_symbol', label: 'Add Symbol', icon: <Plus size={16} /> },
-  { id: 'add_pipe', label: 'Add Pipe', icon: <Minus size={16} /> },
-  { id: 'delete', label: 'Delete', icon: <Trash2 size={16} /> },
-];
+function SymbolPalette({
+  search,
+  onSearchChange,
+}: {
+  search: string;
+  onSearchChange: (v: string) => void;
+}) {
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+  const toggle = (key: string) =>
+    setCollapsed((p) => ({ ...p, [key]: !p[key] }));
 
-export default function PidEditorPage() {
-  const [activeTool, setActiveTool] = useState<Tool>('select');
-  const [expandedCat, setExpandedCat] = useState<string>(symbolPalette[0].name);
+  const onDragStart = (
+    e: React.DragEvent,
+    categoryKey: string,
+    symbolIndex: number,
+  ) => {
+    e.dataTransfer.setData('application/pid-category', categoryKey);
+    e.dataTransfer.setData('application/pid-index', String(symbolIndex));
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const q = search.toLowerCase().trim();
 
   return (
-    <div className="min-h-screen bg-scada-dark flex flex-col">
-      {/* Toolbar */}
-      <div className="flex items-center justify-between border-b border-scada-border bg-scada-panel px-4 py-2">
-        <div className="flex items-center gap-1">
-          {tools.map((tool) => (
-            <button key={tool.id} onClick={() => setActiveTool(tool.id)} className={clsx('flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all', activeTool === tool.id ? 'bg-nexaproc-amber/15 text-nexaproc-amber border border-nexaproc-amber/30' : 'text-white/50 hover:text-white/80 hover:bg-white/5 border border-transparent')} title={tool.label}>
-              {tool.icon}
-              <span className="hidden md:inline">{tool.label}</span>
-            </button>
-          ))}
-          <div className="w-px h-6 bg-scada-border mx-2" />
-          <button className="p-1.5 rounded text-white/40 hover:text-white/70 hover:bg-white/5 transition-colors" title="Undo"><Undo2 size={16} /></button>
-          <button className="p-1.5 rounded text-white/40 hover:text-white/70 hover:bg-white/5 transition-colors" title="Redo"><Redo2 size={16} /></button>
-          <div className="w-px h-6 bg-scada-border mx-2" />
-          <button className="p-1.5 rounded text-white/40 hover:text-white/70 hover:bg-white/5 transition-colors" title="Zoom In"><ZoomIn size={16} /></button>
-          <button className="p-1.5 rounded text-white/40 hover:text-white/70 hover:bg-white/5 transition-colors" title="Zoom Out"><ZoomOut size={16} /></button>
-          <button className="p-1.5 rounded text-white/40 hover:text-white/70 hover:bg-white/5 transition-colors" title="Grid"><Grid3x3 size={16} /></button>
-          <button className="p-1.5 rounded text-white/40 hover:text-white/70 hover:bg-white/5 transition-colors" title="Layers"><Layers size={16} /></button>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" icon={<Upload size={14} />}>Import</Button>
-          <Button variant="ghost" size="sm" icon={<Download size={14} />}>Export</Button>
-          <Button variant="primary" size="sm" icon={<Save size={14} />}>Save</Button>
-        </div>
+    <div className="w-48 shrink-0 flex flex-col border-r border-scada-border bg-scada-panel overflow-hidden">
+      <div className="px-2 pt-2 pb-1">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Search..."
+          className="w-full px-2 py-1.5 rounded bg-scada-dark border border-scada-border text-xs text-white
+                     placeholder-white/25 focus:outline-none focus:border-cyan-500"
+        />
       </div>
+      <div className="flex-1 overflow-y-auto px-1 pb-2 space-y-0.5 scrollbar-thin">
+        {CATEGORIES.map((cat) => {
+          const symbols = q
+            ? cat.symbols
+                .map((s, idx) => ({ ...s, idx }))
+                .filter((s) => s.name.toLowerCase().includes(q))
+            : cat.symbols.map((s, idx) => ({ ...s, idx }));
 
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left: Symbol palette */}
-        <div className="w-56 flex-shrink-0 border-r border-scada-border bg-scada-panel overflow-y-auto">
-          <div className="p-3 border-b border-scada-border">
-            <h3 className="text-xs font-semibold text-white/60 uppercase tracking-wider">Symbol Palette</h3>
-          </div>
-          <div className="p-2 space-y-1">
-            {symbolPalette.map((cat) => (
-              <div key={cat.name}>
-                <button onClick={() => setExpandedCat(expandedCat === cat.name ? '' : cat.name)} className="w-full flex items-center justify-between px-2 py-1.5 text-xs font-semibold text-white/70 hover:text-white hover:bg-white/5 rounded transition-colors">
-                  {cat.name}
-                  <span className="text-white/30">{expandedCat === cat.name ? '\u2212' : '+'}</span>
-                </button>
-                {expandedCat === cat.name && (
-                  <div className="ml-2 mt-1 space-y-0.5">
-                    {cat.items.map((item) => (
-                      <div key={item.id} draggable className="flex items-center gap-2 px-2 py-1.5 rounded cursor-grab text-xs text-white/50 hover:text-white hover:bg-nexaproc-green/10 transition-colors">
-                        <span className="text-nexaproc-green/60">{item.icon}</span>
-                        {item.label}
+          if (q && symbols.length === 0) return null;
+          const isCollapsed = collapsed[cat.key] && !q;
+
+          return (
+            <div key={cat.key}>
+              <button
+                onClick={() => toggle(cat.key)}
+                className="w-full flex items-center justify-between px-2 py-1 rounded text-[10px] font-bold
+                           text-white/60 hover:text-white hover:bg-white/5 uppercase tracking-wider"
+              >
+                <span>
+                  {cat.label} <span className="text-white/25 font-normal">({symbols.length})</span>
+                </span>
+                <span className="text-white/25 text-xs">{isCollapsed ? '+' : '\u2212'}</span>
+              </button>
+              {!isCollapsed && (
+                <div className="space-y-px mt-px">
+                  {symbols.map((sym) => {
+                    const Comp = sym.component;
+                    return (
+                      <div
+                        key={`${cat.key}-${sym.idx}`}
+                        draggable
+                        onDragStart={(e) => onDragStart(e, cat.key, sym.idx)}
+                        className="flex items-center gap-1.5 px-1.5 py-1 rounded cursor-grab
+                                   hover:bg-white/5 active:bg-cyan-500/10 group"
+                      >
+                        <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                          <Comp size={24} state={cat.states[0]} />
+                        </div>
+                        <span className="text-[10px] text-white/40 group-hover:text-white/70 truncate leading-tight">
+                          {sym.name}
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Center: Canvas */}
-        <div className="flex-1 relative overflow-hidden bg-scada-dark">
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.08) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-16 h-16 rounded-full bg-nexaproc-green/10 flex items-center justify-center mx-auto mb-4">
-                <Grid3x3 size={28} className="text-nexaproc-green/40" />
-              </div>
-              <p className="text-sm text-white/40 max-w-xs">Drag symbols from the palette to build your P&ID diagram</p>
-              <p className="text-xs text-white/20 mt-2">Use the toolbar to switch between select, pan, and drawing tools</p>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          </div>
-          <div className="absolute bottom-4 right-4 flex items-center gap-2 rounded-lg border border-scada-border bg-scada-panel/90 px-3 py-1.5">
-            <span className="text-xs text-white/40">Zoom:</span>
-            <span className="text-xs font-mono text-white">100%</span>
-          </div>
-          <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-lg border border-scada-border bg-scada-panel/90 px-3 py-1.5">
-            <span className="text-xs font-mono text-white/40">X: 0 Y: 0</span>
-          </div>
-        </div>
-
-        {/* Right: Properties */}
-        <div className="w-64 flex-shrink-0 border-l border-scada-border bg-scada-panel overflow-y-auto">
-          <div className="p-3 border-b border-scada-border">
-            <h3 className="text-xs font-semibold text-white/60 uppercase tracking-wider">Properties</h3>
-          </div>
-          <div className="p-4 flex items-center justify-center h-64">
-            <div className="text-center">
-              <MousePointer2 size={24} className="text-white/20 mx-auto mb-2" />
-              <p className="text-xs text-white/30">Select an element to edit properties</p>
-            </div>
-          </div>
-          <div className="border-t border-scada-border p-3 space-y-2">
-            {[['Drawing:', 'Untitled P&ID'], ['Elements:', '0'], ['Connections:', '0'], ['Grid:', '24px, Snap On']].map(([l, v]) => (
-              <div key={l} className="flex justify-between text-xs">
-                <span className="text-white/30">{l}</span>
-                <span className="text-white/60 font-mono">{v}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+          );
+        })}
       </div>
+    </div>
+  );
+}
+
+// ─── Properties Panel ────────────────────────────────────────────────────────
+
+function PropertiesPanel({
+  node,
+  onUpdate,
+  onDelete,
+}: {
+  node: Node | null;
+  onUpdate: (id: string, data: Partial<PidSymbolNodeData>) => void;
+  onDelete: (id: string) => void;
+}) {
+  if (!node) {
+    return (
+      <div className="w-52 shrink-0 flex items-center justify-center border-l border-scada-border bg-scada-panel">
+        <p className="text-white/25 text-[10px] text-center px-3">
+          Select a node to edit properties
+        </p>
+      </div>
+    );
+  }
+
+  const d = node.data as PidSymbolNodeData;
+  const category = CATEGORIES.find((c) => c.key === d.categoryKey);
+  const states = category?.states ?? [];
+  const hasFillLevel = category?.hasFillLevel ?? false;
+
+  return (
+    <div className="w-52 shrink-0 flex flex-col border-l border-scada-border bg-scada-panel overflow-y-auto scrollbar-thin">
+      <div className="p-3 space-y-3">
+        {/* Header */}
+        <div className="pb-2 border-b border-scada-border">
+          <h3 className="text-xs font-semibold text-white truncate">{d.symbolName}</h3>
+          <p className="text-[9px] text-white/25 uppercase tracking-wider">{category?.label}</p>
+        </div>
+
+        {/* Label */}
+        <div>
+          <label className="block text-[9px] font-medium text-white/40 uppercase tracking-wider mb-1">Label</label>
+          <input
+            type="text"
+            value={d.label ?? ''}
+            onChange={(e) => onUpdate(node.id, { label: e.target.value })}
+            placeholder="e.g. TI-101"
+            className="w-full px-2 py-1 rounded bg-scada-dark border border-scada-border text-xs text-white
+                       placeholder-white/20 focus:outline-none focus:border-cyan-500"
+          />
+        </div>
+
+        {/* Size */}
+        <div>
+          <label className="block text-[9px] font-medium text-white/40 uppercase tracking-wider mb-1">
+            Size: {d.size ?? 64}px
+          </label>
+          <input
+            type="range" min={24} max={120} value={d.size ?? 64}
+            onChange={(e) => onUpdate(node.id, { size: Number(e.target.value) })}
+            className="w-full accent-cyan-500 h-1"
+          />
+        </div>
+
+        {/* Rotation */}
+        <div>
+          <label className="block text-[9px] font-medium text-white/40 uppercase tracking-wider mb-1">Rotation</label>
+          <div className="grid grid-cols-4 gap-0.5">
+            {ROTATIONS.map((r) => (
+              <button
+                key={r}
+                onClick={() => onUpdate(node.id, { rotation: r })}
+                className={`py-1 rounded text-[9px] font-medium ${
+                  (d.rotation ?? 0) === r
+                    ? 'bg-cyan-600 text-white'
+                    : 'bg-scada-dark text-white/35 hover:text-white/60'
+                }`}
+              >
+                {r}&deg;
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* State */}
+        {states.length > 0 && (
+          <div>
+            <label className="block text-[9px] font-medium text-white/40 uppercase tracking-wider mb-1">State</label>
+            <select
+              value={d.state ?? states[0]}
+              onChange={(e) => onUpdate(node.id, { state: e.target.value })}
+              className="w-full px-2 py-1 rounded bg-scada-dark border border-scada-border text-xs text-white
+                         focus:outline-none focus:border-cyan-500 capitalize"
+            >
+              {states.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Animated */}
+        <div className="flex items-center justify-between">
+          <label className="text-[9px] font-medium text-white/40 uppercase tracking-wider">Animated</label>
+          <button
+            onClick={() => onUpdate(node.id, { animated: !d.animated })}
+            className={`w-8 h-4 rounded-full transition-colors relative ${
+              d.animated ? 'bg-cyan-600' : 'bg-gray-600'
+            }`}
+          >
+            <span className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-transform ${
+              d.animated ? 'translate-x-4' : 'translate-x-0.5'
+            }`} />
+          </button>
+        </div>
+
+        {/* Fill level */}
+        {hasFillLevel && (
+          <div>
+            <label className="block text-[9px] font-medium text-white/40 uppercase tracking-wider mb-1">
+              Fill: {d.fillLevel ?? 50}%
+            </label>
+            <input
+              type="range" min={0} max={100} value={d.fillLevel ?? 50}
+              onChange={(e) => onUpdate(node.id, { fillLevel: Number(e.target.value) })}
+              className="w-full accent-cyan-500 h-1"
+            />
+          </div>
+        )}
+
+        {/* Delete */}
+        <button
+          onClick={() => onDelete(node.id)}
+          className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded bg-red-500/10 border border-red-500/20
+                     text-red-400 text-[10px] font-medium hover:bg-red-500/20 transition-colors mt-2"
+        >
+          <Trash2 size={11} /> Delete Element
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Component ──────────────────────────────────────────────────────────
+
+export default function PidEditorPage() {
+  const reactFlowWrapper = useRef<HTMLDivElement>(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([] as Node[]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([] as Edge[]);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+  const [showMiniMap, setShowMiniMap] = useState(true);
+  const [saveFlash, setSaveFlash] = useState(false);
+
+  const selectedNode = useMemo(
+    () => nodes.find((n) => n.id === selectedNodeId) ?? null,
+    [nodes, selectedNodeId],
+  );
+
+  // Connect
+  const onConnect = useCallback(
+    (connection: Connection) => {
+      setEdges((eds) =>
+        addEdge(
+          { ...connection, type: 'pipe', data: { pipeType: 'pipe', pipeAnimated: false } },
+          eds,
+        ),
+      );
+    },
+    [setEdges],
+  );
+
+  // Selection
+  const onSelectionChange = useCallback(
+    ({ nodes: sel }: { nodes: Node[]; edges: Edge[] }) => {
+      setSelectedNodeId(sel.length === 1 ? sel[0].id : null);
+    },
+    [],
+  );
+
+  // Drop
+  const onDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const onDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      const categoryKey = e.dataTransfer.getData('application/pid-category');
+      const symbolIndexStr = e.dataTransfer.getData('application/pid-index');
+      if (!categoryKey || symbolIndexStr === '') return;
+
+      const symbolIndex = parseInt(symbolIndexStr, 10);
+      const category = CATEGORIES.find((c) => c.key === categoryKey);
+      const symbol = category?.symbols[symbolIndex];
+      if (!category || !symbol) return;
+
+      let position = { x: e.clientX, y: e.clientY };
+      if (reactFlowInstance?.screenToFlowPosition) {
+        position = reactFlowInstance.screenToFlowPosition({ x: e.clientX, y: e.clientY });
+      } else {
+        const bounds = reactFlowWrapper.current?.getBoundingClientRect();
+        if (bounds) {
+          position = { x: e.clientX - bounds.left, y: e.clientY - bounds.top };
+        }
+      }
+      position = { x: Math.round(position.x / 20) * 20, y: Math.round(position.y / 20) * 20 };
+
+      const newNode: Node = {
+        id: `n-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        type: 'pidSymbol',
+        position,
+        data: {
+          symbolComponent: symbol.component,
+          symbolName: symbol.name,
+          categoryKey,
+          symbolIndex,
+          size: 64,
+          rotation: 0,
+          state: category.states[0] ?? 'running',
+          animated: false,
+          fillLevel: category.hasFillLevel ? 50 : undefined,
+          label: '',
+        } satisfies PidSymbolNodeData,
+      };
+      setNodes((nds) => [...nds, newNode]);
+    },
+    [reactFlowInstance, setNodes],
+  );
+
+  // Property update
+  const onPropertyUpdate = useCallback(
+    (nodeId: string, updates: Partial<PidSymbolNodeData>) => {
+      setNodes((nds) =>
+        nds.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data, ...updates } } : n)),
+      );
+    },
+    [setNodes],
+  );
+
+  // Delete node
+  const onDeleteNode = useCallback(
+    (nodeId: string) => {
+      setNodes((nds) => nds.filter((n) => n.id !== nodeId));
+      setEdges((eds) => eds.filter((e) => e.source !== nodeId && e.target !== nodeId));
+      setSelectedNodeId(null);
+    },
+    [setNodes, setEdges],
+  );
+
+  // Save (placeholder)
+  const handleSave = useCallback(() => {
+    setSaveFlash(true);
+    setTimeout(() => setSaveFlash(false), 1500);
+  }, []);
+
+  return (
+    <div className="-m-6 flex h-[calc(100vh-3.5rem)]">
+      {/* Left: Compact Symbol Palette */}
+      <SymbolPalette search={search} onSearchChange={setSearch} />
+
+      {/* Center: React Flow Canvas */}
+      <div className="flex-1 relative" ref={reactFlowWrapper}>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onSelectionChange={onSelectionChange}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
+          onInit={setReactFlowInstance}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          snapToGrid
+          snapGrid={[20, 20]}
+          defaultEdgeOptions={{ type: 'pipe' }}
+          fitView
+          style={{ background: '#0a0f0a' }}
+          deleteKeyCode={['Backspace', 'Delete']}
+          proOptions={{ hideAttribution: true }}
+        >
+          <Background variant={BackgroundVariant.Dots} color="#1e2e1e" gap={20} />
+          <Controls />
+          {showMiniMap && (
+            <MiniMap
+              nodeColor={(n) => {
+                const cat = (n.data as PidSymbolNodeData)?.categoryKey;
+                const colors: Record<string, string> = {
+                  valves: '#4ade80', pumps: '#60a5fa', motors: '#f59e0b', vessels: '#8b5cf6',
+                  exchangers: '#ef4444', instruments: '#06b6d4', piping: '#6b7280',
+                  material: '#d97706', process: '#ec4899',
+                };
+                return colors[cat] ?? '#4ade80';
+              }}
+              maskColor="rgba(0,0,0,0.7)"
+              style={{ background: '#0a0f0a' }}
+            />
+          )}
+
+          {/* Top toolbar */}
+          <Panel position="top-center">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-scada-panel/90 border border-scada-border backdrop-blur-sm shadow-lg">
+              <span className="text-sm font-semibold text-white">P&ID Editor</span>
+              <div className="w-px h-4 bg-scada-border" />
+              <span className="text-[10px] text-white/30">
+                {nodes.length} elements &middot; {edges.length} connections
+              </span>
+              <div className="w-px h-4 bg-scada-border" />
+              <button
+                onClick={() => setShowMiniMap((v) => !v)}
+                className="p-1 rounded text-white/40 hover:text-white/70 transition-colors"
+                title={showMiniMap ? 'Hide minimap' : 'Show minimap'}
+              >
+                {showMiniMap ? <EyeOff size={13} /> : <Eye size={13} />}
+              </button>
+              <Button
+                size="sm"
+                variant="primary"
+                icon={<Save size={12} />}
+                onClick={handleSave}
+                className={`text-[11px] ${saveFlash ? '!bg-green-600' : ''}`}
+              >
+                {saveFlash ? 'Saved!' : 'Save'}
+              </Button>
+            </div>
+          </Panel>
+
+          {/* Empty state hint */}
+          {nodes.length === 0 && (
+            <Panel position="top-left" className="!top-16 !left-4">
+              <div className="px-3 py-2 rounded-lg bg-nexaproc-amber/10 border border-nexaproc-amber/20 max-w-[220px]">
+                <p className="text-[11px] text-nexaproc-amber/80 leading-relaxed">
+                  Drag symbols from the palette on the left and drop them onto the canvas to start building your P&ID diagram.
+                </p>
+              </div>
+            </Panel>
+          )}
+        </ReactFlow>
+      </div>
+
+      {/* Right: Properties Panel */}
+      <PropertiesPanel
+        node={selectedNode}
+        onUpdate={onPropertyUpdate}
+        onDelete={onDeleteNode}
+      />
     </div>
   );
 }
