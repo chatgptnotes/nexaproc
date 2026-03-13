@@ -24,6 +24,18 @@
   0% { stroke-dashoffset: 20; }
   100% { stroke-dashoffset: 0; }
 }
+@keyframes flowDash {
+  0% { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* ─── React Flow overrides for SCADA dark theme ───────────────────────────── */
+.react-flow__background { background: #0a0f0a; }
+.react-flow__minimap { background: #12181290; border: 1px solid #1e2e1e; border-radius: 8px; }
+.react-flow__controls { background: #121812; border: 1px solid #1e2e1e; border-radius: 8px; }
+.react-flow__controls-button { background: #121812; border-bottom: 1px solid #1e2e1e; fill: #9ca3af; }
+.react-flow__controls-button:hover { background: #1e2e1e; }
+.react-flow__attribution { display: none; }
 
 /* ─── Custom scrollbar ─────────────────────────────────────────────────────── */
 .scrollbar-thin::-webkit-scrollbar { width: 6px; }

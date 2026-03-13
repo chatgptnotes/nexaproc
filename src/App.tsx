@@ -20,6 +20,9 @@ const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 // Dashboard & Projects
 const DashboardPage = lazy(() => import('@/pages/app/DashboardPage'));
 const ProjectsPage = lazy(() => import('@/pages/app/ProjectsPage'));
+const ScadaScreensPage = lazy(() => import('@/pages/app/projects/ScadaScreensPage'));
+const ScreenEditorPage = lazy(() => import('@/pages/app/projects/ScreenEditorPage'));
+const ScreenViewerPage = lazy(() => import('@/pages/app/projects/ScreenViewerPage'));
 
 // Monitoring
 const PlantsPage = lazy(() => import('@/pages/app/monitoring/PlantsPage'));
@@ -116,6 +119,9 @@ export default function App() {
             {/* Dashboard & Projects */}
             <Route index element={<DashboardPage />} />
             <Route path="projects" element={<ProjectsPage />} />
+            <Route path="projects/:projectId/screens" element={<ScadaScreensPage />} />
+            <Route path="projects/:projectId/screens/:screenId/edit" element={<ScreenEditorPage />} />
+            <Route path="projects/:projectId/screens/:screenId/view" element={<ScreenViewerPage />} />
 
             {/* Monitoring */}
             <Route path="monitoring/plants" element={<PlantsPage />} />

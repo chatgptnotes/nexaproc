@@ -79,14 +79,14 @@ import {
 // ── Types ───────────────────────────────────────────────────────────────────
 
 /** Generic component type that accepts size, state, animated, rotation, fillLevel */
-type SymbolComponent = React.FC<Record<string, unknown>>;
+export type SymbolComponent = React.FC<Record<string, unknown>>;
 
-interface SymbolEntry {
+export interface SymbolEntry {
   name: string;
   component: SymbolComponent;
 }
 
-interface CategoryDef {
+export interface CategoryDef {
   key: string;
   label: string;
   states: string[];
@@ -96,12 +96,12 @@ interface CategoryDef {
 
 // ── Symbol Registry ─────────────────────────────────────────────────────────
 
-const VALVE_STATES = ['open', 'closed', 'transit', 'fault', 'manual', 'offline'];
-const EQUIPMENT_STATES = ['running', 'stopped', 'fault', 'maintenance', 'standby', 'offline'];
-const INSTRUMENT_STATES = ['normal', 'alarm', 'fault', 'offline', 'manual'];
-const SIMPLE_STATES = ['active', 'inactive', 'fault', 'offline'];
+export const VALVE_STATES = ['open', 'closed', 'transit', 'fault', 'manual', 'offline'];
+export const EQUIPMENT_STATES = ['running', 'stopped', 'fault', 'maintenance', 'standby', 'offline'];
+export const INSTRUMENT_STATES = ['normal', 'alarm', 'fault', 'offline', 'manual'];
+export const SIMPLE_STATES = ['active', 'inactive', 'fault', 'offline'];
 
-const CATEGORIES: CategoryDef[] = [
+export const CATEGORIES: CategoryDef[] = [
   {
     key: 'valves',
     label: 'Valves',
@@ -326,7 +326,7 @@ const CATEGORIES: CategoryDef[] = [
   },
 ];
 
-const TOTAL_SYMBOLS = CATEGORIES.reduce((sum, c) => sum + c.symbols.length, 0);
+export const TOTAL_SYMBOLS = CATEGORIES.reduce((sum, c) => sum + c.symbols.length, 0);
 const ROTATIONS = [0, 90, 180, 270] as const;
 
 // ── Component ───────────────────────────────────────────────────────────────
@@ -625,6 +625,3 @@ export const PidSymbolPalette: React.FC = () => {
 };
 
 export default PidSymbolPalette;
-
-/** Exported for use by SymbolLibraryPage summary cards */
-export { CATEGORIES, TOTAL_SYMBOLS };

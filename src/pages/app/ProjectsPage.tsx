@@ -233,8 +233,7 @@ export default function ProjectsPage() {
   };
 
   const openProject = (id: string) => {
-    // Navigate to dashboard (in a real app this would set the active project context)
-    navigate('/app');
+    navigate(`/app/projects/${id}/screens`);
   };
 
   const canProceedDetails = newProject.name.trim().length >= 2 && newProject.code.trim().length >= 2;

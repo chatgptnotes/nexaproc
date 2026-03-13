@@ -10,6 +10,9 @@ export const ROUTES = {
   APP: '/app',
   DASHBOARD: '/app',
   PROJECTS: '/app/projects',
+  PROJECT_SCREENS: '/app/projects/:projectId/screens',
+  SCREEN_EDITOR: '/app/projects/:projectId/screens/:screenId/edit',
+  SCREEN_VIEWER: '/app/projects/:projectId/screens/:screenId/view',
 
   // Monitoring
   PLANTS: '/app/monitoring/plants',
