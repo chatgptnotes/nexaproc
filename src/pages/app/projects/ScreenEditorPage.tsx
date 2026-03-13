@@ -530,6 +530,43 @@ export default function ScreenEditorPage() {
     return () => window.removeEventListener('keydown', handler);
   }, [handleSave]);
 
+  // ── Arrow key nudging: 1px default, 10px+Shift, 20px+Ctrl (grid snap) ──
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (!selectedNodeId) return;
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+      const arrowKeys: Record<string, { dx: number; dy: number }> = {
+        ArrowUp: { dx: 0, dy: -1 },
+        ArrowDown: { dx: 0, dy: 1 },
+        ArrowLeft: { dx: -1, dy: 0 },
+        ArrowRight: { dx: 1, dy: 0 },
+      };
+      const dir = arrowKeys[e.key];
+      if (!dir) return;
+
+      e.preventDefault();
+      const step = e.ctrlKey || e.metaKey ? 20 : e.shiftKey ? 10 : 1;
+
+      setNodes((nds) =>
+        nds.map((n) =>
+          n.id === selectedNodeId
+            ? {
+                ...n,
+                position: {
+                  x: n.position.x + dir.dx * step,
+                  y: n.position.y + dir.dy * step,
+                },
+              }
+            : n,
+        ),
+      );
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [selectedNodeId, setNodes]);
+
   // ── Not found ──────────────────────────────────────────────────────────
   if (!screen) {
     return (

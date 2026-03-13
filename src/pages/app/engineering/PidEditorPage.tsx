@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ReactFlow,
   Background,
@@ -123,10 +123,12 @@ function PropertiesPanel({
   node,
   onUpdate,
   onDelete,
+  onMove,
 }: {
   node: Node | null;
   onUpdate: (id: string, data: Partial<PidSymbolNodeData>) => void;
   onDelete: (id: string) => void;
+  onMove: (id: string, position: { x: number; y: number }) => void;
 }) {
   if (!node) {
     return (
@@ -150,6 +152,34 @@ function PropertiesPanel({
         <div className="pb-2 border-b border-scada-border">
           <h3 className="text-xs font-semibold text-white truncate">{d.symbolName}</h3>
           <p className="text-[9px] text-white/25 uppercase tracking-wider">{category?.label}</p>
+        </div>
+
+        {/* Position X/Y */}
+        <div>
+          <label className="block text-[9px] font-medium text-white/40 uppercase tracking-wider mb-1">Position</label>
+          <div className="grid grid-cols-2 gap-1">
+            <div className="flex items-center gap-1">
+              <span className="text-[9px] text-white/30 w-3">X</span>
+              <input
+                type="number"
+                value={Math.round(node.position.x)}
+                onChange={(e) => onMove(node.id, { x: Number(e.target.value), y: node.position.y })}
+                className="w-full px-1.5 py-0.5 rounded bg-scada-dark border border-scada-border text-[10px] font-mono text-white
+                           focus:outline-none focus:border-cyan-500"
+              />
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-[9px] text-white/30 w-3">Y</span>
+              <input
+                type="number"
+                value={Math.round(node.position.y)}
+                onChange={(e) => onMove(node.id, { x: node.position.x, y: Number(e.target.value) })}
+                className="w-full px-1.5 py-0.5 rounded bg-scada-dark border border-scada-border text-[10px] font-mono text-white
+                           focus:outline-none focus:border-cyan-500"
+              />
+            </div>
+          </div>
+          <p className="text-[8px] text-white/20 mt-1">Arrow keys: 1px | +Shift: 10px | +Ctrl: 20px</p>
         </div>
 
         {/* Label */}
@@ -356,6 +386,16 @@ export default function PidEditorPage() {
     [setNodes],
   );
 
+  // Move node to exact position
+  const onMoveNode = useCallback(
+    (nodeId: string, position: { x: number; y: number }) => {
+      setNodes((nds) =>
+        nds.map((n) => (n.id === nodeId ? { ...n, position } : n)),
+      );
+    },
+    [setNodes],
+  );
+
   // Delete node
   const onDeleteNode = useCallback(
     (nodeId: string) => {
@@ -371,6 +411,56 @@ export default function PidEditorPage() {
     setSaveFlash(true);
     setTimeout(() => setSaveFlash(false), 1500);
   }, []);
+
+  // Arrow key nudging — 1px default, 10px with Shift, snap-to-grid with Ctrl
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (!selectedNodeId) return;
+      // Don't intercept if user is typing in an input
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+      const arrowKeys: Record<string, { dx: number; dy: number }> = {
+        ArrowUp: { dx: 0, dy: -1 },
+        ArrowDown: { dx: 0, dy: 1 },
+        ArrowLeft: { dx: -1, dy: 0 },
+        ArrowRight: { dx: 1, dy: 0 },
+      };
+      const dir = arrowKeys[e.key];
+      if (!dir) return;
+
+      e.preventDefault();
+      const step = e.ctrlKey || e.metaKey ? 20 : e.shiftKey ? 10 : 1;
+
+      setNodes((nds) =>
+        nds.map((n) =>
+          n.id === selectedNodeId
+            ? {
+                ...n,
+                position: {
+                  x: n.position.x + dir.dx * step,
+                  y: n.position.y + dir.dy * step,
+                },
+              }
+            : n,
+        ),
+      );
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [selectedNodeId, setNodes]);
+
+  // Ctrl+S save shortcut
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        handleSave();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [handleSave]);
 
   return (
     <div className="-m-6 flex h-[calc(100vh-3.5rem)]">
@@ -445,6 +535,15 @@ export default function PidEditorPage() {
             </div>
           </Panel>
 
+          {/* Selection hint */}
+          {selectedNodeId && (
+            <Panel position="bottom-center">
+              <div className="px-3 py-1 rounded bg-scada-panel/80 border border-scada-border text-[10px] text-white/40">
+                Arrow keys: nudge 1px &middot; Shift+Arrow: 10px &middot; Ctrl+Arrow: 20px (grid)
+              </div>
+            </Panel>
+          )}
+
           {/* Empty state hint */}
           {nodes.length === 0 && (
             <Panel position="top-left" className="!top-16 !left-4">
@@ -463,6 +562,7 @@ export default function PidEditorPage() {
         node={selectedNode}
         onUpdate={onPropertyUpdate}
         onDelete={onDeleteNode}
+        onMove={onMoveNode}
       />
     </div>
   );
