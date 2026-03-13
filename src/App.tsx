@@ -17,8 +17,9 @@ const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 
 // ─── SCADA pages (lazy loaded) ──────────────────────────────────────────────
 
-// Dashboard
+// Dashboard & Projects
 const DashboardPage = lazy(() => import('@/pages/app/DashboardPage'));
+const ProjectsPage = lazy(() => import('@/pages/app/ProjectsPage'));
 
 // Monitoring
 const PlantsPage = lazy(() => import('@/pages/app/monitoring/PlantsPage'));
@@ -112,8 +113,9 @@ export default function App() {
         {/* ── Protected SCADA Application ─────────────────────────────── */}
         <Route element={<ProtectedRoute />}>
           <Route path="app" element={<ScadaLayout />}>
-            {/* Dashboard */}
+            {/* Dashboard & Projects */}
             <Route index element={<DashboardPage />} />
+            <Route path="projects" element={<ProjectsPage />} />
 
             {/* Monitoring */}
             <Route path="monitoring/plants" element={<PlantsPage />} />

@@ -56,6 +56,8 @@ import {
   KeyRound,
   Settings,
   BadgeCheck,
+  FolderKanban,
+  Shapes,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { NAVIGATION, type NavGroup } from '@/config/navigation';
@@ -115,6 +117,8 @@ const iconMap: Record<string, LucideIcon> = {
   KeyRound,
   Settings,
   BadgeCheck,
+  FolderKanban,
+  Shapes,
 };
 
 function getIcon(name: string): LucideIcon {

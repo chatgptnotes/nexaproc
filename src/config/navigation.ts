@@ -19,6 +19,7 @@ export const NAVIGATION: NavGroup[] = [
     icon: 'LayoutDashboard',
     items: [
       { label: 'Dashboard', path: ROUTES.DASHBOARD, icon: 'LayoutDashboard' },
+      { label: 'Projects', path: ROUTES.PROJECTS, icon: 'FolderKanban' },
     ],
   },
   {

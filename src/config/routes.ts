@@ -9,6 +9,7 @@ export const ROUTES = {
   // App root
   APP: '/app',
   DASHBOARD: '/app',
+  PROJECTS: '/app/projects',
 
   // Monitoring
   PLANTS: '/app/monitoring/plants',

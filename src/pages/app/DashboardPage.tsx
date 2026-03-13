@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
-import { Activity, AlertTriangle, Gauge, BarChart3, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Activity, AlertTriangle, Gauge, BarChart3, Clock, Plus, FolderKanban } from 'lucide-react';
 import { format } from 'date-fns';
 
-import { Card, Badge } from '@/components/ui';
+import { Card, Badge, Button } from '@/components/ui';
 import {
   KPICard,
   AlarmBanner,
@@ -58,6 +59,7 @@ const stateBadge: Record<string, { variant: 'danger' | 'warning' | 'success'; la
 // Component
 // ---------------------------------------------------------------------------
 export default function DashboardPage() {
+  const navigate = useNavigate();
   const alarmCounts = useMemo(() => getAlarmCounts(), []);
   const trendData = useMemo(() => generateTrendData(30), []);
   const recentAlarms = useMemo(() => [...alarms].slice(0, 5), []);
@@ -75,9 +77,27 @@ export default function DashboardPage() {
             Real-time plant overview
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs text-gray-500">
-          <Clock className="w-3.5 h-3.5" />
-          {format(new Date(), 'dd MMM yyyy HH:mm:ss')}
+        <div className="flex items-center gap-3">
+          <Button
+            variant="secondary"
+            size="sm"
+            icon={<FolderKanban size={14} />}
+            onClick={() => navigate('/app/projects')}
+          >
+            Projects
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            icon={<Plus size={14} />}
+            onClick={() => navigate('/app/projects')}
+          >
+            New Project
+          </Button>
+          <div className="flex items-center gap-2 text-xs text-gray-500 ml-2">
+            <Clock className="w-3.5 h-3.5" />
+            {format(new Date(), 'dd MMM yyyy HH:mm:ss')}
+          </div>
         </div>
       </div>
 
